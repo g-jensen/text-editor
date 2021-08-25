@@ -2,19 +2,12 @@
 
 Button::Button(sf::Vector2f position, sf::Vector2f size)
 {
-	this->hitbox = sf::IntRect((int)position.x,(int)position.y,(int)size.x,(int)size.y);
-	this->rectangle = sf::RectangleShape(size);
-	this->rectangle.setPosition(position);
+	this->setSize(size);
+	this->setPosition(position);
+	this->hoverColor = sf::Color(this->getFillColor().r - 26, this->getFillColor().b - 26, this->getFillColor().g - 26);
 }
 
-void Button::setPosition(sf::Vector2f position)
+bool Button::contains(sf::Vector2i position)
 {
-	this->hitbox.left = position.x;
-	this->hitbox.top = position.y;
-	this->rectangle.setPosition(position);
-}
-
-bool Button::contains(sf::Vector2f position)
-{
-	return this->hitbox.contains((int)position.x,(int)position.y);
+	return this->getGlobalBounds().contains(position.x,position.y);
 }
