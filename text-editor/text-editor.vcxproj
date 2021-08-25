@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="Font.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="text-editor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="File.h" />
     <ClInclude Include="Font.h" />

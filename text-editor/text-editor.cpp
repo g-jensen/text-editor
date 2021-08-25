@@ -31,6 +31,10 @@ int main()
     File::content.push_back(Line("",0));
     cursor.setCurrentLine(0);
 
+
+
+
+
     // run the program as long as the window is open
     while (window.isOpen())
     {
