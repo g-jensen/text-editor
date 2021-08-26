@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <fstream>
 #include <unordered_map>
 
 #include "Cursor.h"
@@ -11,44 +10,32 @@
 
 int main()
 {
+    // loads the default font
     Font::load();
-    sf::ContextSettings settings;
-    settings.antialiasingLevel = 8;
 
     // create the window
-    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(800, 600), "Text Editor",sf::Style::Default,settings);
-
-    float yPadding = 30.f;
+    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(800, 600), "Text Editor",sf::Style::Default);
 
     Cursor cursor(
-        sf::Vector2f(10,yPadding),
+        sf::Vector2f(10,File::yPadding),
         sf::Vector2f(10,35)
     );
 
+    // initialize first line of file
     File::content.push_back(Line("",0));
     cursor.setCurrentLine(0);
 
+    // make top-left file button
+    Button* fileButton = new Button();
+    UIBuilder::buildFileButton(*fileButton);
 
-    Button fileButton(sf::Vector2f(0,0),sf::Vector2f(40,20));
-    
-    sf::Text fileButtonLabel;
-    fileButtonLabel.setFont(Font::defaultFont);
-    fileButtonLabel.setPosition(sf::Vector2f(0, 0));
-    fileButtonLabel.setCharacterSize(20);
-    fileButtonLabel.setFillColor(sf::Color::Black);
-    fileButtonLabel.setString("file");
-
-    
     // make file input pop-up box
     TextInput* fileInput = new TextInput();
-    UIBuilder::buildFileInputBox(fileInput);
-    std::cout << fileInput->getPosition().x << std::endl;
-
+    UIBuilder::buildFileInputBox(*fileInput);
 
     // run the program as long as the window is open
     while (window->isOpen())
     {
-        settings.antialiasingLevel = 8;
         // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
         while (window->pollEvent(event))
@@ -59,15 +46,15 @@ int main()
             }
 
             // handle hovering over fileButton
-            if (fileButton.contains(sf::Mouse::getPosition(*window))) {
-                fileButton.setFillColor(fileButton.hoverColor);
+            if (fileButton->contains(sf::Mouse::getPosition(*window))) {
+                fileButton->setFillColor(fileButton->hoverColor);
                 // handle clicking or "selecting" fileButton
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     fileInput->isOpen = true;
                 }
             }
             else {
-                fileButton.setFillColor(sf::Color::White);
+                fileButton->setFillColor(sf::Color::White);
             }
 
             if (event.type == sf::Event::TextEntered)
@@ -172,9 +159,9 @@ int main()
         }
 
         // set position all lines of file
-        File::content[0].text.setPosition(10, yPadding);
+        File::content[0].text.setPosition(10, File::yPadding);
         for (int i = 1; i < File::content.size(); i++) {
-            File::content[i].text.setPosition(10,(File::content[i].lineNumber) * yPadding);
+            File::content[i].text.setPosition(10,(File::content[i].lineNumber) * File::yPadding);
         }
 
         // clear the window with black color
@@ -189,38 +176,23 @@ int main()
             window->draw(cursor);
         }
 
-        fileButton.draw(window);
-        // window->draw(fileButton);
-        window->draw(fileButtonLabel);
+        fileButton->draw(window);
 
         if (fileInput->isOpen) {
-            std::cout << "ham" << std::endl;
             fileInput->draw(window);
-            // window->draw(*fileInput);
         }
         
-        
-
         // end the current frame
         window->display();
     }
 
-    // deletes
+    // delete pointers
+    delete fileButton;
     delete fileInput;
     delete window;
 
     // write to "output.txt"
-    std::ofstream file;
-    file.open("output.txt");
-    for (int i = 0; i < File::content.size(); i++) {
-        if (i != File::content.size() - 1) {
-            file << File::content[i].text.getString().toAnsiString() << std::endl;
-        }
-        else {
-            file << File::content[i].text.getString().toAnsiString();
-        }
-    }
-    file.close();
+    File::writeFileToOutput();
 
     return 0;
 }
