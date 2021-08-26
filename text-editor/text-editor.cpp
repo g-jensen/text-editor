@@ -7,6 +7,7 @@
 #include "File.h"
 #include "Button.h"
 #include "TextInput.h"
+#include "UIBuilder.h"
 
 int main()
 {
@@ -15,7 +16,7 @@ int main()
     settings.antialiasingLevel = 8;
 
     // create the window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Text Editor",sf::Style::Default,settings);
+    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(800, 600), "Text Editor",sf::Style::Default,settings);
 
     float yPadding = 30.f;
 
@@ -37,30 +38,32 @@ int main()
     fileButtonLabel.setFillColor(sf::Color::Black);
     fileButtonLabel.setString("file");
 
-    TextInput fileInput(sf::Vector2f(100,100),sf::Vector2f(300,100));
-    fileInput.setFillColor(sf::Color(200,200,200));
-    fileInput.title.setString("input file: ");
-    fileInput.isOpen = false;
+    
+    // make file input pop-up box
+    TextInput* fileInput = new TextInput();
+    UIBuilder::buildFileInputBox(fileInput);
+    std::cout << fileInput->getPosition().x << std::endl;
+
 
     // run the program as long as the window is open
-    while (window.isOpen())
+    while (window->isOpen())
     {
         settings.antialiasingLevel = 8;
         // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
-        while (window.pollEvent(event))
+        while (window->pollEvent(event))
         {
             // "close requested" event: we close the window
             if (event.type == sf::Event::Closed) {
-                window.close();
+                window->close();
             }
 
             // handle hovering over fileButton
-            if (fileButton.contains(sf::Mouse::getPosition(window))) {
+            if (fileButton.contains(sf::Mouse::getPosition(*window))) {
                 fileButton.setFillColor(fileButton.hoverColor);
                 // handle clicking or "selecting" fileButton
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    fileInput.isOpen = true;
+                    fileInput->isOpen = true;
                 }
             }
             else {
@@ -75,7 +78,7 @@ int main()
 
                 if (event.text.unicode < 128) {
 
-                    if (!fileInput.isOpen) {
+                    if (!fileInput->isOpen) {
                         // if press backspace
                         if (event.text.unicode == 8) {
                             // if the line is empty
@@ -109,15 +112,8 @@ int main()
                         }
                     }
                     else {
-                        if (event.text.unicode == 8) {
-                            fileInput.value.setString(fileInput.value.getString().substring(0, fileInput.value.getString().getSize() - 1));
-                        }
-                        else {
-                            fileInput.value.setString(fileInput.value.getString() + static_cast<char>(event.text.unicode));
-                        }
                         if (event.text.unicode == 13) {
-                            std::string value = (std::string)fileInput.value.getString();
-                            value = value.substr(0, value.length() - 1);
+                            std::string value = (std::string)fileInput->value.getString();
                             std::ifstream myfile(value);
                             std::string data;
                             if (myfile.is_open())
@@ -132,7 +128,13 @@ int main()
                                 myfile.close();
                             }
                             else std::cout << "Unable to open \"" + value + "\"";
-                            fileInput.isOpen = false;
+                            fileInput->isOpen = false;
+                        } 
+                        else if (event.text.unicode == 8) {
+                            fileInput->value.setString(fileInput->value.getString().substring(0, fileInput->value.getString().getSize() - 1));
+                        }
+                        else {
+                            fileInput->value.setString(fileInput->value.getString() + static_cast<char>(event.text.unicode));
                         }
                     }
                 }
@@ -176,30 +178,36 @@ int main()
         }
 
         // clear the window with black color
-        window.clear(sf::Color::Black);
+        window->clear(sf::Color::Black);
 
         // draw everything here...
         for (auto item : File::content) {
-            window.draw(item.text);
+            window->draw(item.text);
         }
 
         if (cursor.isVisible) {
-            window.draw(cursor);
+            window->draw(cursor);
         }
 
-        window.draw(fileButton);
-        window.draw(fileButtonLabel);
+        fileButton.draw(window);
+        // window->draw(fileButton);
+        window->draw(fileButtonLabel);
 
-        if (fileInput.isOpen) {
-            window.draw(fileInput);
-            window.draw(fileInput.value);
-            window.draw(fileInput.title);
+        if (fileInput->isOpen) {
+            std::cout << "ham" << std::endl;
+            fileInput->draw(window);
+            // window->draw(*fileInput);
         }
+        
         
 
         // end the current frame
-        window.display();
+        window->display();
     }
+
+    // deletes
+    delete fileInput;
+    delete window;
 
     // write to "output.txt"
     std::ofstream file;
