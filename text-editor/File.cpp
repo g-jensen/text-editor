@@ -1,19 +1,21 @@
 #include "File.h"
 
-std::vector<Line> File::content = {};
+State File::CurrentState = State::Default;
 
-float File::yPadding = 30.f;
+std::vector<Line> File::Content = {};
 
-void File::writeFileToOutput()
+float File::YPadding = 30.f;
+
+void File::WriteFileToOutput()
 {
     std::ofstream file;
     file.open("output.txt");
-    for (int i = 0; i < File::content.size(); i++) {
-        if (i != File::content.size() - 1) {
-            file << File::content[i].text.getString().toAnsiString() << std::endl;
+    for (int i = 0; i < File::Content.size(); i++) {
+        if (i != File::Content.size() - 1) {
+            file << File::Content[i].text.getString().toAnsiString() << std::endl;
         }
         else {
-            file << File::content[i].text.getString().toAnsiString();
+            file << File::Content[i].text.getString().toAnsiString();
         }
     }
     file.close();

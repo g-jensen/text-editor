@@ -7,6 +7,7 @@
 #include "Button.h"
 #include "TextInput.h"
 #include "UIBuilder.h"
+#include "State.h"
 
 int main()
 {
@@ -16,13 +17,15 @@ int main()
     // create the window
     sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(800, 600), "Text Editor",sf::Style::Default);
 
+    File::CurrentState = State::Default;
+
     Cursor cursor(
-        sf::Vector2f(10,File::yPadding),
+        sf::Vector2f(10,File::YPadding),
         sf::Vector2f(10,35)
     );
 
     // initialize first line of file
-    File::content.push_back(Line("",0));
+    File::Content.push_back(Line("",0));
     cursor.setCurrentLine(0);
 
     // make top-left file button
@@ -69,33 +72,33 @@ int main()
                         // if press backspace
                         if (event.text.unicode == 8) {
                             // if the line is empty
-                            if (File::content[cursor.getCurrentLine()].text.getString().getSize() == 0 && (File::content.size() > 0 && cursor.getCurrentLine() != 0)) {
+                            if (File::Content[cursor.getCurrentLine()].text.getString().getSize() == 0 && (File::Content.size() > 0 && cursor.getCurrentLine() != 0)) {
                                 // delete the line
-                                File::content.erase(File::content.begin() + cursor.getCurrentLine());
+                                File::Content.erase(File::Content.begin() + cursor.getCurrentLine());
                                 // decrement current line
                                 cursor.setCurrentLine(cursor.getCurrentLine() - 1);
                                 // decrement every line's number past the empty line
-                                for (int i = cursor.getCurrentLine() + 1; i < File::content.size(); i++) {
-                                    File::content[i].lineNumber--;
+                                for (int i = cursor.getCurrentLine() + 1; i < File::Content.size(); i++) {
+                                    File::Content[i].lineNumber--;
                                 }
                             }
                             else {
                                 // delete a character
-                                File::content[cursor.getCurrentLine()].text.setString(File::content[cursor.getCurrentLine()].text.getString().substring(0, File::content[cursor.getCurrentLine()].text.getString().getSize() - 1));
+                                File::Content[cursor.getCurrentLine()].text.setString(File::Content[cursor.getCurrentLine()].text.getString().substring(0, File::Content[cursor.getCurrentLine()].text.getString().getSize() - 1));
                             }
                         }
                         // if pressed enter
                         else if (event.text.unicode == 13) {
                             cursor.setCurrentLine(cursor.getCurrentLine() + 1);
-                            File::content.insert(File::content.begin() + cursor.getCurrentLine(), Line("", cursor.getCurrentLine()));
-                            for (int i = cursor.getCurrentLine(); i < File::content.size(); i++) {
-                                File::content[i].lineNumber++;
+                            File::Content.insert(File::Content.begin() + cursor.getCurrentLine(), Line("", cursor.getCurrentLine()));
+                            for (int i = cursor.getCurrentLine(); i < File::Content.size(); i++) {
+                                File::Content[i].lineNumber++;
                             }
                         }
                         // normal ascii
                         else {
                             // append whatever was typed
-                            File::content[cursor.getCurrentLine()].text.setString(File::content[cursor.getCurrentLine()].text.getString() + static_cast<char>(event.text.unicode));
+                            File::Content[cursor.getCurrentLine()].text.setString(File::Content[cursor.getCurrentLine()].text.getString() + static_cast<char>(event.text.unicode));
                         }
                     }
                     else {
@@ -105,11 +108,11 @@ int main()
                             std::string data;
                             if (myfile.is_open())
                             {
-                                File::content.clear();
+                                File::Content.clear();
                                 int n = 1;
                                 while (std::getline(myfile, data))
                                 {
-                                    File::content.push_back(Line(data, n));
+                                    File::Content.push_back(Line(data, n));
                                     n++;
                                 }
                                 myfile.close();
@@ -131,7 +134,7 @@ int main()
                 cursor.isVisible = true;
                 cursor.clock.restart();
                 // decrement current line
-                if (File::content.size() > 0 && cursor.getCurrentLine() != 0) {
+                if (File::Content.size() > 0 && cursor.getCurrentLine() != 0) {
                     cursor.setCurrentLine(cursor.getCurrentLine() - 1);
                 }
             }
@@ -140,7 +143,7 @@ int main()
                 cursor.isVisible = true;
                 cursor.clock.restart();
                 // increment current line
-                if (File::content.size() > 0 && cursor.getCurrentLine() < File::content.size() - 1) {
+                if (File::Content.size() > 0 && cursor.getCurrentLine() < File::Content.size() - 1) {
                     cursor.setCurrentLine(cursor.getCurrentLine() + 1);
                 }
             }
@@ -148,8 +151,8 @@ int main()
 
         // set the cursor position to the beginning of the current line
         cursor.setPosition(sf::Vector2f(
-            File::content[cursor.getCurrentLine()].text.getPosition().x,
-            File::content[cursor.getCurrentLine()].text.getPosition().y)
+            File::Content[cursor.getCurrentLine()].text.getPosition().x,
+            File::Content[cursor.getCurrentLine()].text.getPosition().y)
         );
 
         // handle the cursor animation clock
@@ -159,16 +162,16 @@ int main()
         }
 
         // set position all lines of file
-        File::content[0].text.setPosition(10, File::yPadding);
-        for (int i = 1; i < File::content.size(); i++) {
-            File::content[i].text.setPosition(10,(File::content[i].lineNumber) * File::yPadding);
+        File::Content[0].text.setPosition(10, File::YPadding);
+        for (int i = 1; i < File::Content.size(); i++) {
+            File::Content[i].text.setPosition(10,(File::Content[i].lineNumber) * File::YPadding);
         }
 
         // clear the window with black color
         window->clear(sf::Color::Black);
 
         // draw everything here...
-        for (auto item : File::content) {
+        for (auto item : File::Content) {
             window->draw(item.text);
         }
 
@@ -192,7 +195,7 @@ int main()
     delete window;
 
     // write to "output.txt"
-    File::writeFileToOutput();
+    File::WriteFileToOutput();
 
     return 0;
 }
