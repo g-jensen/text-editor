@@ -53,6 +53,7 @@ int main()
                 fileButton->setFillColor(fileButton->hoverColor);
                 // handle clicking or "selecting" fileButton
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    File::CurrentState = State::TextInput;
                     fileInput->isOpen = true;
                 }
             }
@@ -60,15 +61,14 @@ int main()
                 fileButton->setFillColor(sf::Color::White);
             }
 
-            if (event.type == sf::Event::TextEntered)
-            {
-                // handle the cursor animation clock
-                cursor.isVisible = true;
-                cursor.clock.restart();
+            if (File::CurrentState == State::Default) {
 
-                if (event.text.unicode < 128) {
+                if (event.type == sf::Event::TextEntered) {
+                    // handle the cursor animation clock
+                    cursor.isVisible = true;
+                    cursor.clock.restart();
 
-                    if (!fileInput->isOpen) {
+                    if (event.text.unicode < 128) {
                         // if press backspace
                         if (event.text.unicode == 8) {
                             // if the line is empty
@@ -101,7 +101,30 @@ int main()
                             File::Content[cursor.getCurrentLine()].text.setString(File::Content[cursor.getCurrentLine()].text.getString() + static_cast<char>(event.text.unicode));
                         }
                     }
-                    else {
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                    // handle the cursor animation clock
+                    cursor.isVisible = true;
+                    cursor.clock.restart();
+                    // decrement current line
+                    if (File::Content.size() > 0 && cursor.getCurrentLine() != 0) {
+                        cursor.setCurrentLine(cursor.getCurrentLine() - 1);
+                    }
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                    // handle the cursor animation clock
+                    cursor.isVisible = true;
+                    cursor.clock.restart();
+                    // increment current line
+                    if (File::Content.size() > 0 && cursor.getCurrentLine() < File::Content.size() - 1) {
+                        cursor.setCurrentLine(cursor.getCurrentLine() + 1);
+                    }
+                }
+            }
+            if (File::CurrentState == State::TextInput) {
+                if (event.type == sf::Event::TextEntered) {
+                    if (event.text.unicode < 128) {
+                        // enter
                         if (event.text.unicode == 13) {
                             std::string value = (std::string)fileInput->value.getString();
                             std::ifstream myfile(value);
@@ -117,34 +140,20 @@ int main()
                                 }
                                 myfile.close();
                             }
-                            else std::cout << "Unable to open \"" + value + "\"";
+                            else { std::cout << "Unable to open \"" + value + "\""; }
+                            cursor.setCurrentLine(0);
+                            File::CurrentState = State::Default;
                             fileInput->isOpen = false;
-                        } 
+                        }
+                        // backspace
                         else if (event.text.unicode == 8) {
                             fileInput->value.setString(fileInput->value.getString().substring(0, fileInput->value.getString().getSize() - 1));
                         }
+                        // regular character
                         else {
                             fileInput->value.setString(fileInput->value.getString() + static_cast<char>(event.text.unicode));
                         }
                     }
-                }
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                // handle the cursor animation clock
-                cursor.isVisible = true;
-                cursor.clock.restart();
-                // decrement current line
-                if (File::Content.size() > 0 && cursor.getCurrentLine() != 0) {
-                    cursor.setCurrentLine(cursor.getCurrentLine() - 1);
-                }
-            }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                // handle the cursor animation clock
-                cursor.isVisible = true;
-                cursor.clock.restart();
-                // increment current line
-                if (File::Content.size() > 0 && cursor.getCurrentLine() < File::Content.size() - 1) {
-                    cursor.setCurrentLine(cursor.getCurrentLine() + 1);
                 }
             }
         }
