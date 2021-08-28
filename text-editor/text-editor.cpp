@@ -9,6 +9,7 @@
 #include "UIBuilder.h"
 #include "State.h"
 #include "Keybinds.h"
+#include "UIHover.h"
 
 int main()
 {
@@ -52,16 +53,11 @@ int main()
             }
 
             // handle hovering over fileButton
-            if (fileButton->contains(sf::Mouse::getPosition(*window))) {
-                fileButton->setFillColor(fileButton->hoverColor);
-                // handle clicking or "selecting" fileButton
+            if (UIHover::ButtonHover(*fileButton, *window)) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     File::CurrentState = State::TextInput;
                     fileInput->isOpen = true;
                 }
-            }
-            else {
-                fileButton->setFillColor(sf::Color::White);
             }
 
             // reduced from 120 lines to 40...

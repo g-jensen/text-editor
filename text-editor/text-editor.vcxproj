@@ -152,6 +152,7 @@
     <ClCompile Include="text-editor.cpp" />
     <ClCompile Include="TextInput.cpp" />
     <ClCompile Include="UIBuilder.cpp" />
+    <ClCompile Include="UIHover.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Line.h" />
     <ClInclude Include="TextInput.h" />
     <ClInclude Include="UIBuilder.h" />
+    <ClInclude Include="UIHover.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
