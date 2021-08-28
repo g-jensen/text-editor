@@ -13,10 +13,18 @@ Cursor::Cursor(sf::Vector2f position, sf::Vector2f size)
 	this->isVisible = true;
 }
 
-void Cursor::ResetCursorAnimation(Cursor& cursor)
+void Cursor::resetCursorAnimation()
 {
-	cursor.isVisible = true;
-	cursor.clock.restart();
+	this->isVisible = true;
+	this->clock.restart();
+}
+
+void Cursor::updateCursorAnimation()
+{
+	if (this->clock.getElapsedTime().asSeconds() >= this->getAnimationInterval()) {
+		this->clock.restart();
+		this->isVisible = !this->isVisible;
+	}
 }
 
 void Cursor::incrementLine(int n)

@@ -11,7 +11,8 @@ public:
 	sf::Clock clock;
 	bool isVisible;
 
-	static void ResetCursorAnimation(Cursor &cursor);
+	void resetCursorAnimation();
+	void updateCursorAnimation();
 
 	void incrementLine(int n);
 	void decrementLine(int n);

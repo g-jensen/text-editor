@@ -40,10 +40,10 @@ int main()
     // run the program as long as the window is open
     while (window->isOpen())
     {
-        // keep cursor.getCurrentLine up to date with the actual current line (note: cursor.getCurrentLine returns a copy)
+        // keep cursor.getCurrentLine up to date with the actual current line 
+        // (note: cursor.getCurrentLine returns a copy as opposed to File::Content[cursor.getCurrentLine.lineNumber])
         cursor.setCurrentLine(Line(File::Content[cursor.getCurrentLine().lineNumber].text.getString(), cursor.getCurrentLine().lineNumber));
 
-        // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
         while (window->pollEvent(event))
         {
@@ -60,13 +60,13 @@ int main()
                 }
             }
 
-            // reduced from 120 lines to 40...
+            // default state code reduced from 120 lines to 40...
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (File::CurrentState == State::Default) {
 
                 if (event.type == sf::Event::TextEntered) {
                     // handle the cursor animation clock
-                    Cursor::ResetCursorAnimation(cursor);
+                    cursor.resetCursorAnimation();
 
                     if (event.text.unicode < 128) {
                         // if press backspace
@@ -87,7 +87,7 @@ int main()
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                     // handle the cursor animation clock
-                    Cursor::ResetCursorAnimation(cursor);
+                    cursor.resetCursorAnimation();
 
                     // decrement current line
                     if (File::Content.size() > 0 && cursor.getCurrentLine().lineNumber != 0) {
@@ -96,7 +96,7 @@ int main()
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                     // handle the cursor animation clock
-                    Cursor::ResetCursorAnimation(cursor);
+                    cursor.resetCursorAnimation();
 
                     // increment current line
                     if (File::Content.size() > 0 && cursor.getCurrentLine().lineNumber < File::Content.size() - 1) {
@@ -127,16 +127,14 @@ int main()
         }
 
         // set the cursor position to the beginning of the current line
+        // change later to be better or something
         cursor.setPosition(sf::Vector2f(
             File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().x,
             File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y)
         );
 
         // handle the cursor animation clock
-        if (cursor.clock.getElapsedTime().asSeconds() >= cursor.getAnimationInterval()) {
-            cursor.clock.restart();
-            cursor.isVisible = !cursor.isVisible;
-        }
+        cursor.updateCursorAnimation();
 
         // set position all lines of file
         File::Content[0].text.setPosition(10, File::YPadding);
