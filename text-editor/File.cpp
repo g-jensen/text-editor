@@ -20,3 +20,21 @@ void File::WriteFileToOutput()
     }
     file.close();
 }
+
+void File::LoadFile(std::string path)
+{
+    std::ifstream myfile(path);
+    std::string data;
+    if (myfile.is_open())
+    {
+        File::Content.clear();
+        int n = 1;
+        while (std::getline(myfile, data))
+        {
+            File::Content.push_back(Line(data, n));
+            n++;
+        }
+        myfile.close();
+    }
+    else { std::cout << "Unable to open \"" + path + "\""; }
+}

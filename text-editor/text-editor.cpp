@@ -8,6 +8,7 @@
 #include "TextInput.h"
 #include "UIBuilder.h"
 #include "State.h"
+#include "Keybinds.h"
 
 int main()
 {
@@ -19,14 +20,13 @@ int main()
 
     File::CurrentState = State::Default;
 
-    Cursor cursor(
-        sf::Vector2f(10,File::YPadding),
-        sf::Vector2f(10,35)
-    );
+    // initialize main cursor
+    // Cursor::MainCursor = Cursor(sf::Vector2f(10, File::YPadding), sf::Vector2f(10, 35));
+    Cursor cursor = Cursor(sf::Vector2f(10, File::YPadding), sf::Vector2f(10, 35));
 
     // initialize first line of file
     File::Content.push_back(Line("",0));
-    cursor.setCurrentLine(0);
+    cursor.setCurrentLine(File::Content[0]);
 
     // make top-left file button
     Button* fileButton = new Button();
@@ -39,6 +39,9 @@ int main()
     // run the program as long as the window is open
     while (window->isOpen())
     {
+        // keep cursor.getCurrentLine up to date with the actual current line (note: cursor.getCurrentLine returns a copy)
+        cursor.setCurrentLine(Line(File::Content[cursor.getCurrentLine().lineNumber].text.getString(), cursor.getCurrentLine().lineNumber));
+
         // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
         while (window->pollEvent(event))
@@ -61,107 +64,76 @@ int main()
                 fileButton->setFillColor(sf::Color::White);
             }
 
+            // reduced from 120 lines to 40...
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (File::CurrentState == State::Default) {
 
                 if (event.type == sf::Event::TextEntered) {
                     // handle the cursor animation clock
-                    cursor.isVisible = true;
-                    cursor.clock.restart();
+                    Cursor::ResetCursorAnimation(cursor);
 
                     if (event.text.unicode < 128) {
                         // if press backspace
                         if (event.text.unicode == 8) {
-                            // if the line is empty
-                            if (File::Content[cursor.getCurrentLine()].text.getString().getSize() == 0 && (File::Content.size() > 0 && cursor.getCurrentLine() != 0)) {
-                                // delete the line
-                                File::Content.erase(File::Content.begin() + cursor.getCurrentLine());
-                                // decrement current line
-                                cursor.setCurrentLine(cursor.getCurrentLine() - 1);
-                                // decrement every line's number past the empty line
-                                for (int i = cursor.getCurrentLine() + 1; i < File::Content.size(); i++) {
-                                    File::Content[i].lineNumber--;
-                                }
-                            }
-                            else {
-                                // delete a character
-                                File::Content[cursor.getCurrentLine()].text.setString(File::Content[cursor.getCurrentLine()].text.getString().substring(0, File::Content[cursor.getCurrentLine()].text.getString().getSize() - 1));
-                            }
+                            // delete one character
+                            Keybinds::DefaultBackspace(cursor);
                         }
                         // if pressed enter
                         else if (event.text.unicode == 13) {
-                            cursor.setCurrentLine(cursor.getCurrentLine() + 1);
-                            File::Content.insert(File::Content.begin() + cursor.getCurrentLine(), Line("", cursor.getCurrentLine()));
-                            for (int i = cursor.getCurrentLine(); i < File::Content.size(); i++) {
-                                File::Content[i].lineNumber++;
-                            }
+                            Keybinds::DefaultEnter(cursor);
                         }
                         // normal ascii
                         else {
                             // append whatever was typed
-                            File::Content[cursor.getCurrentLine()].text.setString(File::Content[cursor.getCurrentLine()].text.getString() + static_cast<char>(event.text.unicode));
+                            File::Content[cursor.getCurrentLine().lineNumber].text.setString(File::Content[cursor.getCurrentLine().lineNumber].text.getString() + static_cast<char>(event.text.unicode));
                         }
                     }
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
                     // handle the cursor animation clock
-                    cursor.isVisible = true;
-                    cursor.clock.restart();
+                    Cursor::ResetCursorAnimation(cursor);
+
                     // decrement current line
-                    if (File::Content.size() > 0 && cursor.getCurrentLine() != 0) {
-                        cursor.setCurrentLine(cursor.getCurrentLine() - 1);
+                    if (File::Content.size() > 0 && cursor.getCurrentLine().lineNumber != 0) {
+                        cursor.decrementLine(1);
                     }
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                     // handle the cursor animation clock
-                    cursor.isVisible = true;
-                    cursor.clock.restart();
+                    Cursor::ResetCursorAnimation(cursor);
+
                     // increment current line
-                    if (File::Content.size() > 0 && cursor.getCurrentLine() < File::Content.size() - 1) {
-                        cursor.setCurrentLine(cursor.getCurrentLine() + 1);
+                    if (File::Content.size() > 0 && cursor.getCurrentLine().lineNumber < File::Content.size() - 1) {
+                        cursor.incrementLine(1);
                     }
                 }
             }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (File::CurrentState == State::TextInput) {
                 if (event.type == sf::Event::TextEntered) {
                     if (event.text.unicode < 128) {
                         // enter
                         if (event.text.unicode == 13) {
-                            std::string value = (std::string)fileInput->value.getString();
-                            std::ifstream myfile(value);
-                            std::string data;
-                            if (myfile.is_open())
-                            {
-                                File::Content.clear();
-                                int n = 1;
-                                while (std::getline(myfile, data))
-                                {
-                                    File::Content.push_back(Line(data, n));
-                                    n++;
-                                }
-                                myfile.close();
-                            }
-                            else { std::cout << "Unable to open \"" + value + "\""; }
-                            cursor.setCurrentLine(0);
-                            File::CurrentState = State::Default;
-                            fileInput->isOpen = false;
+                            Keybinds::TextInputEnter(*fileInput, cursor);
                         }
                         // backspace
                         else if (event.text.unicode == 8) {
-                            fileInput->value.setString(fileInput->value.getString().substring(0, fileInput->value.getString().getSize() - 1));
+                            Keybinds::TextInputBackspace(*fileInput);
                         }
-                        // regular character
+                        // input regular character
                         else {
                             fileInput->value.setString(fileInput->value.getString() + static_cast<char>(event.text.unicode));
                         }
                     }
                 }
             }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
         // set the cursor position to the beginning of the current line
         cursor.setPosition(sf::Vector2f(
-            File::Content[cursor.getCurrentLine()].text.getPosition().x,
-            File::Content[cursor.getCurrentLine()].text.getPosition().y)
+            File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().x,
+            File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y)
         );
 
         // handle the cursor animation clock

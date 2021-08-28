@@ -147,6 +147,7 @@
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Keybinds.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="text-editor.cpp" />
     <ClCompile Include="TextInput.cpp" />
@@ -155,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="Cursor.h" />
+    <ClInclude Include="Keybinds.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="IDrawable.h" />
     <ClInclude Include="File.h" />

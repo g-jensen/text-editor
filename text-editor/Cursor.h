@@ -11,14 +11,19 @@ public:
 	sf::Clock clock;
 	bool isVisible;
 
-	void setCurrentLine(int line);
+	static void ResetCursorAnimation(Cursor &cursor);
+
+	void incrementLine(int n);
+	void decrementLine(int n);
+
+	void setCurrentLine(Line line);
 	void setAnimationInterval(float interval);
 
-	int getCurrentLine();
+	Line getCurrentLine();
 	float getAnimationInterval();
 
 private:
-	int currentLine;
+	Line currentLine;
 	float animationInterval;
 };
 

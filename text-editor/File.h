@@ -4,6 +4,8 @@ class Line;
 #include <fstream>
 #include "Line.h"
 #include "State.h"
+#include <iostream>
+#include "Cursor.h"
 
 class File
 {
@@ -12,5 +14,6 @@ public:
 	static std::vector<Line> Content;
 	static float YPadding;
 	static void WriteFileToOutput();
+	static void LoadFile(std::string path);
 };
 

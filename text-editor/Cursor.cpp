@@ -6,11 +6,30 @@ Cursor::Cursor(sf::Vector2f position, sf::Vector2f size)
 	this->setSize(size);
 	this->clock.restart();
 	this->animationInterval = 0.5f;
-	this->currentLine = 0;
+
+	// this will probably cause a bug
+	this->currentLine = Line("", 0);
+	
 	this->isVisible = true;
 }
 
-void Cursor::setCurrentLine(int line)
+void Cursor::ResetCursorAnimation(Cursor& cursor)
+{
+	cursor.isVisible = true;
+	cursor.clock.restart();
+}
+
+void Cursor::incrementLine(int n)
+{
+	this->setCurrentLine(Line(this->getCurrentLine().text.getString(), this->getCurrentLine().lineNumber + n));
+}
+
+void Cursor::decrementLine(int n)
+{
+	this->setCurrentLine(Line(this->getCurrentLine().text.getString(), this->getCurrentLine().lineNumber - n));
+}
+
+void Cursor::setCurrentLine(Line line)
 {
 	this->currentLine = line;
 }
@@ -20,7 +39,7 @@ void Cursor::setAnimationInterval(float interval)
 	this->animationInterval = interval;
 }
 
-int Cursor::getCurrentLine()
+Line Cursor::getCurrentLine()
 {
 	return this->currentLine;
 }
