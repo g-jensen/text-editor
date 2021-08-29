@@ -23,11 +23,27 @@ bool Line::isEmpty()
 	return this->text.getString().getSize() == 0;
 }
 
-void Line::deleteEndCharacter()
+void Line::deleteCharacter(int index)
 {
-	this->text.setString(this->text.getString().substring(0, this->text.getString().getSize() - 1));
-
+	// std::cout << index << std::endl;
+	if (this->text.getString().getSize() > 0) {
+		if (index > 0) {
+			std::string firstHalf = this->text.getString().substring(0, index);
+			std::string secondHalf = this->text.getString().substring(index + 1, this->text.getString().getSize());
+			this->text.setString(firstHalf + secondHalf);
+		}
+		else if (index == 0) {
+			std::string secondHalf = this->text.getString().substring(1, this->text.getString().getSize());
+			this->text.setString(secondHalf);
+		}
+	}
 }
+
+//void Line::deleteEndCharacter()
+//{
+//	this->text.setString(this->text.getString().substring(0, this->text.getString().getSize() - 1));
+//
+//}
 
 void Line::populateTextList(sf::Text text)
 {

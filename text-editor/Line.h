@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics/Text.hpp>
 #include "Font.h"
+#include <iostream>
 
 class Line
 {
@@ -9,7 +10,7 @@ public:
 	Line(std::string content, int lineNumber);
 	Line();
 	bool isEmpty();
-	void deleteEndCharacter();
+	void deleteCharacter(int index);
 	sf::Text text;
 	std::vector<sf::Text> textList;
 	int lineNumber;

@@ -90,7 +90,9 @@ int main()
                         // normal ascii
                         else {
                             // append whatever was typed
-                            File::Content[cursor.getCurrentLine().lineNumber].text.setString(File::Content[cursor.getCurrentLine().lineNumber].text.getString() + static_cast<char>(event.text.unicode));
+                            std::string firstHalf = File::Content[cursor.getCurrentLine().lineNumber].text.getString().toAnsiString().substr(0,cursor.lineIndex);
+                            std::string secondHalf = File::Content[cursor.getCurrentLine().lineNumber].text.getString().toAnsiString().substr(cursor.lineIndex, File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize());
+                            File::Content[cursor.getCurrentLine().lineNumber].text.setString(firstHalf + static_cast<char>(event.text.unicode) + secondHalf);
                             cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
                             cursor.lineIndex++;
                         }
@@ -165,9 +167,9 @@ int main()
             File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y)
         );
 
-        if (cursor.lineIndex != lineIndexPlaceholder) {
+        /*if (cursor.lineIndex != lineIndexPlaceholder) {
             std::cout << cursor.lineIndex << std::endl;
-        }
+        }*/
 
         // handle the cursor animation clock
         cursor.updateCursorAnimation();
