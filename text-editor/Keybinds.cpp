@@ -14,10 +14,15 @@ void Keybinds::DefaultBackspace(Cursor& cursor)
         for (int i = cursor.getCurrentLine().lineNumber + 1; i < File::Content.size(); i++) {
             File::Content[i].lineNumber--;
         }
+
+        cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize();
     }
     else {
         // delete a character 
         File::Content[cursor.getCurrentLine().lineNumber].deleteEndCharacter();
+        if (cursor.lineIndex > 0) {
+            cursor.lineIndex--;
+        }
     }
 }
 

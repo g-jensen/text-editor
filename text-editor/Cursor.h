@@ -10,6 +10,7 @@ public:
 	Cursor(sf::Vector2f position, sf::Vector2f size);
 	sf::Clock clock;
 	bool isVisible;
+	int lineIndex;
 
 	void resetCursorAnimation();
 	void updateCursorAnimation();

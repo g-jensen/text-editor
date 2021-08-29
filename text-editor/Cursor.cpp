@@ -11,6 +11,7 @@ Cursor::Cursor(sf::Vector2f position, sf::Vector2f size)
 	this->currentLine = Line("", 0);
 	
 	this->isVisible = true;
+	this->lineIndex = 0;
 }
 
 void Cursor::resetCursorAnimation()

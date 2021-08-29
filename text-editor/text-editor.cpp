@@ -37,9 +37,15 @@ int main()
     TextInput* fileInput = new TextInput();
     UIBuilder::buildFileInputBox(*fileInput);
 
+    cursor.lineIndex = 0;
+
+    // just for printing
+    int lineIndexPlaceholder = 0;
+
     // run the program as long as the window is open
     while (window->isOpen())
     {
+        lineIndexPlaceholder = cursor.lineIndex;
         // keep cursor.getCurrentLine up to date with the actual current line 
         // (note: cursor.getCurrentLine returns a copy as opposed to File::Content[cursor.getCurrentLine.lineNumber])
         cursor.setCurrentLine(Line(File::Content[cursor.getCurrentLine().lineNumber].text.getString(), cursor.getCurrentLine().lineNumber));
@@ -73,15 +79,20 @@ int main()
                         if (event.text.unicode == 8) {
                             // delete one character
                             Keybinds::DefaultBackspace(cursor);
+                            cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
                         }
                         // if pressed enter
                         else if (event.text.unicode == 13) {
                             Keybinds::DefaultEnter(cursor);
+                            cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
+                            cursor.lineIndex = 0;
                         }
                         // normal ascii
                         else {
                             // append whatever was typed
                             File::Content[cursor.getCurrentLine().lineNumber].text.setString(File::Content[cursor.getCurrentLine().lineNumber].text.getString() + static_cast<char>(event.text.unicode));
+                            cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
+                            cursor.lineIndex++;
                         }
                     }
                 }
@@ -89,18 +100,39 @@ int main()
                     // handle the cursor animation clock
                     cursor.resetCursorAnimation();
 
+                    if (cursor.getCurrentLine().text.getString().getSize() > File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize()) {
+                        cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize();
+                    }
+
                     // decrement current line
                     if (File::Content.size() > 0 && cursor.getCurrentLine().lineNumber != 0) {
                         cursor.decrementLine(1);
                     }
+
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
                     // handle the cursor animation clock
                     cursor.resetCursorAnimation();
 
+                    if (cursor.getCurrentLine().text.getString().getSize() > File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize()) {
+                        cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize();
+                    }
+
                     // increment current line
                     if (File::Content.size() > 0 && cursor.getCurrentLine().lineNumber < File::Content.size() - 1) {
                         cursor.incrementLine(1);
+                    }
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                    cursor.resetCursorAnimation();
+                    if (cursor.lineIndex > 0) {
+                        cursor.lineIndex--;
+                    }
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                    cursor.resetCursorAnimation();
+                    if (cursor.lineIndex < cursor.getCurrentLine().text.getString().getSize()) {
+                        cursor.lineIndex++;
                     }
                 }
             }
@@ -129,9 +161,13 @@ int main()
         // set the cursor position to the beginning of the current line
         // change later to be better or something
         cursor.setPosition(sf::Vector2f(
-            File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().x,
+            cursor.getCurrentLine().getWidth(cursor.lineIndex) + 10,
             File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y)
         );
+
+        if (cursor.lineIndex != lineIndexPlaceholder) {
+            std::cout << cursor.lineIndex << std::endl;
+        }
 
         // handle the cursor animation clock
         cursor.updateCursorAnimation();
