@@ -21,8 +21,6 @@ int main()
 
     File::CurrentState = State::Default;
 
-    // initialize main cursor
-    // Cursor::MainCursor = Cursor(sf::Vector2f(10, File::YPadding), sf::Vector2f(10, 35));
     Cursor cursor = Cursor(sf::Vector2f(10, File::YPadding), sf::Vector2f(10, 35));
 
     // initialize first line of file
@@ -39,9 +37,6 @@ int main()
 
     cursor.lineIndex = 0;
 
-    // just for printing
-    int lineIndexPlaceholder = 0;
-
     window->setFramerateLimit(60);
 
     // run the program as long as the window is open
@@ -49,7 +44,6 @@ int main()
     {
         window->setFramerateLimit(60);
 
-        lineIndexPlaceholder = cursor.lineIndex;
         // keep cursor.getCurrentLine up to date with the actual current line 
         // (note: cursor.getCurrentLine returns a copy as opposed to File::Content[cursor.getCurrentLine.lineNumber])
         cursor.setCurrentLine(Line(File::Content[cursor.getCurrentLine().lineNumber].text.getString(), cursor.getCurrentLine().lineNumber));
@@ -128,16 +122,11 @@ int main()
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
-        // set the cursor position to the beginning of the current line
-        // change later to be better or something
         cursor.setPosition(sf::Vector2f(
             cursor.getCurrentLine().getWidth(cursor.lineIndex) + 10,
             File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y)
         );
-
-        /*if (cursor.lineIndex != lineIndexPlaceholder) {
-            std::cout << cursor.lineIndex << std::endl;
-        }*/
+        
 
         // handle the cursor animation clock
         cursor.updateCursorAnimation();

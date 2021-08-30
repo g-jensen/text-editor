@@ -47,7 +47,11 @@ void Keybinds::DefaultEnter(Cursor& cursor)
     std::string secondHalf = File::Content[cursor.getCurrentLine().lineNumber].text.getString().substring(cursor.lineIndex,File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize());
     File::Content[cursor.getCurrentLine().lineNumber].text.setString(File::Content[cursor.getCurrentLine().lineNumber].text.getString().substring(0,cursor.lineIndex));
     cursor.incrementLine(1);
-    File::Content.insert(File::Content.begin() + cursor.getCurrentLine().lineNumber, Line(secondHalf, cursor.getCurrentLine().lineNumber));
+
+    Line newLine = Line(secondHalf, cursor.getCurrentLine().lineNumber);
+    newLine.text.setPosition(10,cursor.getCurrentLine().lineNumber * File::YPadding);
+    File::Content.insert(File::Content.begin() + cursor.getCurrentLine().lineNumber, newLine);
+
     for (int i = cursor.getCurrentLine().lineNumber; i < File::Content.size(); i++) {
         File::Content[i].lineNumber++;
     }
