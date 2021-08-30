@@ -65,7 +65,7 @@ int main()
             // handle hovering over fileButton
             if (UIHover::ButtonHover(*fileButton, *window)) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    File::CurrentState = State::TextInput;
+                    File::CurrentState = State::InputBox;
                     fileInput->isOpen = true;
                 }
             }
@@ -81,82 +81,46 @@ int main()
                     if (event.text.unicode < 128) {
                         // if press backspace
                         if (event.text.unicode == 8) {
-                            // delete one character
                             Keybinds::DefaultBackspace(cursor);
-                            cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
                         }
                         // if pressed enter
                         else if (event.text.unicode == 13) {
                             Keybinds::DefaultEnter(cursor);
-                            cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
-                            cursor.lineIndex = 0;
                         }
                         // normal ascii
                         else {
-                            // append whatever was typed
-                            std::string firstHalf = File::Content[cursor.getCurrentLine().lineNumber].text.getString().toAnsiString().substr(0,cursor.lineIndex);
-                            std::string secondHalf = File::Content[cursor.getCurrentLine().lineNumber].text.getString().toAnsiString().substr(cursor.lineIndex, File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize());
-                            File::Content[cursor.getCurrentLine().lineNumber].text.setString(firstHalf + static_cast<char>(event.text.unicode) + secondHalf);
-                            cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
-                            cursor.lineIndex++;
+                            Keybinds::DefaultInputAscii(cursor,event);
                         }
                     }
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                    // handle the cursor animation clock
-                    cursor.resetCursorAnimation();
-
-                    if (cursor.getCurrentLine().text.getString().getSize() > File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize()) {
-                        cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize();
-                    }
-
-                    // decrement current line
-                    if (File::Content.size() > 0 && cursor.getCurrentLine().lineNumber != 0) {
-                        cursor.decrementLine(1);
-                    }
-
+                    Keybinds::DefaultUpArrow(cursor);
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                    // handle the cursor animation clock
-                    cursor.resetCursorAnimation();
-
-                    if (cursor.getCurrentLine().text.getString().getSize() > File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize()) {
-                        cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize();
-                    }
-
-                    // increment current line
-                    if (File::Content.size() > 0 && cursor.getCurrentLine().lineNumber < File::Content.size() - 1) {
-                        cursor.incrementLine(1);
-                    }
+                    Keybinds::DefaultDownArrow(cursor);
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                    cursor.resetCursorAnimation();
-                    if (cursor.lineIndex > 0) {
-                        cursor.lineIndex--;
-                    }
+                    Keybinds::DefaultLeftArrow(cursor);
                 }
                 else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                    cursor.resetCursorAnimation();
-                    if (cursor.lineIndex < cursor.getCurrentLine().text.getString().getSize()) {
-                        cursor.lineIndex++;
-                    }
+                    Keybinds::DefaultRightArrow(cursor);
                 }
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            if (File::CurrentState == State::TextInput) {
+            if (File::CurrentState == State::InputBox) {
                 if (event.type == sf::Event::TextEntered) {
                     if (event.text.unicode < 128) {
                         // enter
                         if (event.text.unicode == 13) {
-                            Keybinds::TextInputEnter(*fileInput, cursor);
+                            Keybinds::InputBoxEnter(*fileInput, cursor);
                         }
                         // backspace
                         else if (event.text.unicode == 8) {
-                            Keybinds::TextInputBackspace(*fileInput);
+                            Keybinds::InputBoxBackspace(*fileInput);
                         }
                         // input regular character
                         else {
-                            fileInput->value.setString(fileInput->value.getString() + static_cast<char>(event.text.unicode));
+                            Keybinds::InputBoxInputAscii(*fileInput, event);
                         }
                     }
                 }
