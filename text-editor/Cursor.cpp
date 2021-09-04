@@ -30,12 +30,16 @@ void Cursor::updateCursorAnimation()
 
 void Cursor::incrementLine(int n)
 {
-	this->setCurrentLine(Line(this->getCurrentLine().text.getString(), this->getCurrentLine().lineNumber + n));
+	Line placeholder = Line(this->getCurrentLine().text.getString(), this->getCurrentLine().lineNumber + n);
+	placeholder.text.setPosition(10, (this->getCurrentLine().lineNumber + 1) * File::YPadding);
+	this->setCurrentLine(placeholder);
 }
 
 void Cursor::decrementLine(int n)
 {
-	this->setCurrentLine(Line(this->getCurrentLine().text.getString(), this->getCurrentLine().lineNumber - n));
+	Line placeholder = Line(this->getCurrentLine().text.getString(), this->getCurrentLine().lineNumber - n);
+	placeholder.text.setPosition(10, (this->getCurrentLine().lineNumber) * File::YPadding);
+	this->setCurrentLine(placeholder);
 }
 
 void Cursor::setCurrentLine(Line line)

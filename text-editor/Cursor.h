@@ -3,6 +3,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Clock.hpp>
 #include "Line.h"
+#include "File.h"
 
 class Cursor : public sf::RectangleShape
 {
