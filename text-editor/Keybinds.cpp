@@ -1,7 +1,7 @@
 #include "Keybinds.h"
 
 
-std::unordered_map<sf::Uint32,  std::string> Keybinds::ComboKeyCodes
+std::unordered_map<sf::Uint32, std::string> Keybinds::ComboKeyCodes
 {    
     {17,"Ctrl + Q"},
     {23,"Ctrl + W"},
@@ -34,37 +34,10 @@ std::unordered_map<sf::Uint32,  std::string> Keybinds::ComboKeyCodes
 sf::Uint32 Keybinds::DeleteCharacter = 0;
 sf::Uint32 Keybinds::InsertNewLine = 0;
 
-sf::Uint32 CursorUp = 0;
-sf::Uint32 CursorDown = 0;
-sf::Uint32 CursorLeft = 0;
-sf::Uint32 CursorRight = 0;
-
-sf::Uint32 CtrlQ = 0;
-sf::Uint32 CtrlW = 0;
-sf::Uint32 CtrlE = 0;
-sf::Uint32 CtrlR = 0;
-sf::Uint32 CtrlT = 0;
-sf::Uint32 CtrlY = 0;
-sf::Uint32 CtrlU = 0;
-sf::Uint32 CtrlI = 0;
-sf::Uint32 CtrlO = 0;
-sf::Uint32 CtrlP = 0;
-sf::Uint32 CtrlA = 0;
-sf::Uint32 CtrlS = 0;
-sf::Uint32 CtrlD = 0;
-sf::Uint32 CtrlF = 0;
-sf::Uint32 CtrlG = 0;
-sf::Uint32 CtrlH = 0;
-sf::Uint32 CtrlJ = 0;
-sf::Uint32 CtrlK = 0;
-sf::Uint32 CtrlL = 0;
-sf::Uint32 CtrlZ = 0;
-sf::Uint32 CtrlX = 0;
-sf::Uint32 CtrlC = 0;
-sf::Uint32 CtrlV = 0;
-sf::Uint32 CtrlB = 0;
-sf::Uint32 CtrlN = 0;
-sf::Uint32 CtrlM = 0;
+sf::Uint32 Keybinds::CursorUp = 0;
+sf::Uint32 Keybinds::CursorDown = 0;
+sf::Uint32 Keybinds::CursorLeft = 0;
+sf::Uint32 Keybinds::CursorRight = 0;
 
 void Keybinds::DefaultBackspace(Cursor& cursor)
 {
@@ -96,17 +69,17 @@ void Keybinds::DefaultBackspace(Cursor& cursor)
             File::Content[cursor.getCurrentLine().lineNumber - 1].text.setString(File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString() + File::Content[cursor.getCurrentLine().lineNumber].text.getString());
             File::Content.erase(File::Content.begin() + cursor.getCurrentLine().lineNumber);
 
+            
             cursor.decrementLine(1);
             
-            cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize() - previousLineSize;
-            std::cout << cursor.lineIndex << std::endl;
+            cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize() - previousLineSize;
 
-            //cursor.lineIndex += 2;
             // decrement every line's number past the empty line
             for (int i = cursor.getCurrentLine().lineNumber + 1; i < File::Content.size(); i++) {
                 File::Content[i].lineNumber--;
             }
 
+            cursor.isVisible = false;
         }
     }
     cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
@@ -127,6 +100,11 @@ void Keybinds::DefaultEnter(Cursor& cursor)
     }
     cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
     cursor.lineIndex = 0;
+
+    cursor.setPosition(sf::Vector2f(
+        cursor.getCurrentLine().getWidth(cursor.lineIndex) + 10,
+        File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y)
+    );
 }
 
 void Keybinds::DefaultInputAscii(Cursor& cursor, sf::Event event)

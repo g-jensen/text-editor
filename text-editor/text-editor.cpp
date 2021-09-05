@@ -26,7 +26,7 @@ int main()
 
     File::CurrentState = State::Default;
 
-    Cursor cursor = Cursor(sf::Vector2f(10, File::YPadding), sf::Vector2f(10, 35));
+    Cursor cursor = Cursor(sf::Vector2f(10, File::YPadding), sf::Vector2f(2, 35));
 
     // initialize first line of file
     File::Content.push_back(Line("",0));
@@ -44,13 +44,12 @@ int main()
 
     window->setFramerateLimit(300);
 
-    //std::ofstream file;
-    //file.open("keycodes.txt");
+    float tempInterval = cursor.getAnimationInterval();
 
     // run the program as long as the window is open
     while (window->isOpen())
     {
-        window->setFramerateLimit(300);
+        window->setFramerateLimit(60);
 
         // keep cursor.getCurrentLine up to date with the actual current line 
         // (note: cursor.getCurrentLine returns a copy as opposed to File::Content[cursor.getCurrentLine.lineNumber])
@@ -77,8 +76,6 @@ int main()
             if (File::CurrentState == State::Default) {
 
                 if (event.type == sf::Event::TextEntered) {
-                    //file << event.text.unicode << std::endl;
-                    //std::cout << event.text.unicode << std::endl;
                     // handle the cursor animation clock
                     cursor.resetCursorAnimation();
 
@@ -90,10 +87,6 @@ int main()
                         // if pressed enter
                         else if (event.text.unicode == Keybinds::InsertNewLine) {
                             Keybinds::DefaultEnter(cursor);
-                            cursor.setPosition(sf::Vector2f(
-                                cursor.getCurrentLine().getWidth(cursor.lineIndex) + 10,
-                                File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y)
-                            );
                         }
                         // normal ascii
                         else {
@@ -137,23 +130,25 @@ int main()
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
+        cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
 
         // std::cout << File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y << std::endl;
 
+        float x = cursor.getCurrentLine().getWidth(cursor.lineIndex) + 10;
+        float y = File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y;
+
         cursor.setPosition(sf::Vector2f(
-            cursor.getCurrentLine().getWidth(cursor.lineIndex) + 10,
-            File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y)
+            x,
+            y)
         );
         
+        File::Content[0].text.setPosition(10, File::YPadding);
+        for (int i = 1; i < File::Content.size(); i++) {
+            File::Content[i].text.setPosition(10, (File::Content[i].lineNumber) * File::YPadding);
+        }
 
         // handle the cursor animation clock
         cursor.updateCursorAnimation();
-
-        // set position all lines of file
-        File::Content[0].text.setPosition(10, File::YPadding);
-        for (int i = 1; i < File::Content.size(); i++) {
-            File::Content[i].text.setPosition(10,(File::Content[i].lineNumber) * File::YPadding);
-        }
 
         // clear the window with black color
         window->clear(sf::Color::Black);
@@ -161,6 +156,13 @@ int main()
         // draw everything here...
         for (auto item : File::Content) {
             window->draw(item.text);
+        }
+
+        cursor.setAnimationInterval(tempInterval);
+        // shitty fix for a shitty bug that makes the cursor jump to x = 10 for 1 frame when deleting a line
+        if (x == 10 && cursor.lineIndex != 0) {
+            cursor.isVisible = false;
+            cursor.setAnimationInterval(cursor.clock.getElapsedTime().asSeconds());
         }
 
         if (cursor.isVisible) {
