@@ -37,7 +37,7 @@ int main()
 
     File::CurrentState = State::Default;
 
-    Cursor cursor = Cursor(sf::Vector2f(10, File::YPadding), sf::Vector2f(2, 35));
+    Cursor cursor = Cursor(sf::Vector2f(10, File::YPadding), sf::Vector2f(15, 5));
 
     // initialize first line of file
     File::Content.push_back(Line("",0));
@@ -83,7 +83,6 @@ int main()
                 }
             }
 
-            // default state code reduced from 120 lines to 40...
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             cursor.isVisible = true;
             if (File::CurrentState == State::Default) {
@@ -120,12 +119,9 @@ int main()
                 }
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 
         cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
-
-        // std::cout << File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y << std::endl;
 
         File::Content[0].text.setPosition(10, File::YPadding);
         for (int i = 1; i < File::Content.size(); i++) {            
@@ -134,12 +130,12 @@ int main()
 
         float x;
         if (cursor.getCurrentLine().getWidth(cursor.lineIndex) > 0) {
-            x = cursor.getCurrentLine().getWidth(cursor.lineIndex)+10;
+            x = cursor.getCurrentLine().getWidth(cursor.lineIndex)+13;
         }
         else {
             x = 10;
         }
-        float y = File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y;
+        float y = File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y + 30;
 
         cursor.setPosition(sf::Vector2f(
             x,
@@ -153,8 +149,6 @@ int main()
         for (auto item : File::Content) {
             window->draw(item.text);
         }
-
-        
 
         if (cursor.isVisible) {
             window->draw(cursor);
