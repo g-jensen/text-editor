@@ -2,4 +2,4 @@
 
 vim-style text editor.
 
-download zip: [windows](README.md)
+download zip: <a href="README.md" download>windows</a>
