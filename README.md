@@ -2,5 +2,5 @@
 
 vim-style text editor.
 
-<a download="README.md" href="/" title="ImageName">download
+<a download="README.md" href="https://raw.githubusercontent.com/g-jensen/text-editor/master" title="ImageName">download
 </a>
