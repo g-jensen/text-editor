@@ -2,4 +2,4 @@
 
 vim-style text editor.
 
-download: [lastest stable build (windows)](https://mega.nz/folder/kLZ2VZaT#zkthHiXY01ihIkSQAt1i2w)
+download: <a href="https://mega.nz/folder/kLZ2VZaT#zkthHiXY01ihIkSQAt1i2w" target="_blank">lastest stable build (windows)</a>
