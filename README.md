@@ -2,5 +2,4 @@
 
 vim-style text editor.
 
-<a download="README.md" href="https://raw.githubusercontent.com/g-jensen/text-editor/master" title="ImageName">download
-</a>
+download: [lastest stable build (windows)](https://mega.nz/folder/kLZ2VZaT#zkthHiXY01ihIkSQAt1i2w)
