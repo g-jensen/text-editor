@@ -14,6 +14,7 @@
 
 int main()
 {
+    #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
     Keybinds::DeleteCharacter = 8;
     Keybinds::InsertNewLine = 13;
@@ -21,8 +22,15 @@ int main()
     // loads the default font
     Font::load();
 
+    // load icon
+    sf::Image icon;
+    icon.loadFromFile("img/tree.png");
+    
+
     // create the window
     sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(800, 600), "Text Editor",sf::Style::Default);
+
+    window->setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());
 
     File::CurrentState = State::Default;
 
@@ -43,8 +51,6 @@ int main()
     cursor.lineIndex = 0;
 
     window->setFramerateLimit(300);
-
-    float tempInterval = cursor.getAnimationInterval();
 
     // run the program as long as the window is open
     while (window->isOpen())
@@ -73,11 +79,10 @@ int main()
 
             // default state code reduced from 120 lines to 40...
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            cursor.isVisible = true;
             if (File::CurrentState == State::Default) {
 
                 if (event.type == sf::Event::TextEntered) {
-                    // handle the cursor animation clock
-                    cursor.resetCursorAnimation();
 
                     if (event.text.unicode < 128) {
                         // if press backspace
@@ -134,21 +139,24 @@ int main()
 
         // std::cout << File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y << std::endl;
 
-        float x = cursor.getCurrentLine().getWidth(cursor.lineIndex) + 10;
-        float y = File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y;
-
-        cursor.setPosition(sf::Vector2f(
-            x,
-            y)
-        );
-        
         File::Content[0].text.setPosition(10, File::YPadding);
         for (int i = 1; i < File::Content.size(); i++) {
             File::Content[i].text.setPosition(10, (File::Content[i].lineNumber) * File::YPadding);
         }
 
-        // handle the cursor animation clock
-        cursor.updateCursorAnimation();
+        float x;
+        if (cursor.getCurrentLine().getWidth(cursor.lineIndex) > 0) {
+            x = cursor.getCurrentLine().getWidth(cursor.lineIndex)+10;
+        }
+        else {
+            x = 10;
+        }
+        float y = File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y;
+
+        cursor.setPosition(sf::Vector2f(
+            x,
+            y
+        ));
 
         // clear the window with black color
         window->clear(sf::Color::Black);
@@ -158,12 +166,7 @@ int main()
             window->draw(item.text);
         }
 
-        cursor.setAnimationInterval(tempInterval);
-        // shitty fix for a shitty bug that makes the cursor jump to x = 10 for 1 frame when deleting a line
-        if (x == 10 && cursor.lineIndex != 0) {
-            cursor.isVisible = false;
-            cursor.setAnimationInterval(cursor.clock.getElapsedTime().asSeconds());
-        }
+        
 
         if (cursor.isVisible) {
             window->draw(cursor);

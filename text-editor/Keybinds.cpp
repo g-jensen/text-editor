@@ -62,6 +62,7 @@ void Keybinds::DefaultBackspace(Cursor& cursor)
             File::Content[cursor.getCurrentLine().lineNumber].deleteCharacter(cursor.lineIndex - 1);
             cursor.lineIndex--;
         }
+        // move previous line onto above line
         else if (File::Content[cursor.getCurrentLine().lineNumber].lineNumber > 0) {
             // std::cout << "chugnus" << std::endl;
             int previousLineSize = File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize();
@@ -69,17 +70,13 @@ void Keybinds::DefaultBackspace(Cursor& cursor)
             File::Content[cursor.getCurrentLine().lineNumber - 1].text.setString(File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString() + File::Content[cursor.getCurrentLine().lineNumber].text.getString());
             File::Content.erase(File::Content.begin() + cursor.getCurrentLine().lineNumber);
 
-            
+            cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber-1].text.getString().getSize() - previousLineSize;
             cursor.decrementLine(1);
-            
-            cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize() - previousLineSize;
 
             // decrement every line's number past the empty line
             for (int i = cursor.getCurrentLine().lineNumber + 1; i < File::Content.size(); i++) {
                 File::Content[i].lineNumber--;
             }
-
-            cursor.isVisible = false;
         }
     }
     cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
