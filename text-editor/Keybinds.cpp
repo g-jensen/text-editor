@@ -88,8 +88,7 @@ void Keybinds::DefaultEnter(Cursor& cursor)
     File::Content[cursor.getCurrentLine().lineNumber].text.setString(File::Content[cursor.getCurrentLine().lineNumber].text.getString().substring(0,cursor.lineIndex));
     cursor.incrementLine(1);
 
-    Line newLine = Line(secondHalf, cursor.getCurrentLine().lineNumber);
-    newLine.text.setPosition(10,(cursor.getCurrentLine().lineNumber+1) * File::YPadding);
+    Line newLine = Line(secondHalf, cursor.getCurrentLine().lineNumber-1);
     File::Content.insert(File::Content.begin() + cursor.getCurrentLine().lineNumber, newLine);
 
     for (int i = cursor.getCurrentLine().lineNumber; i < File::Content.size(); i++) {

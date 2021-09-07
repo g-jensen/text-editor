@@ -31,7 +31,8 @@ void File::LoadFile(std::string path)
         int n = 0;
         while (std::getline(myfile, data))
         {
-            File::Content.push_back(Line(data, n));
+            Line line(data, n);
+            File::Content.push_back(line);
             n++;
         }
         myfile.close();

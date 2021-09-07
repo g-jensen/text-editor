@@ -128,8 +128,8 @@ int main()
         // std::cout << File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y << std::endl;
 
         File::Content[0].text.setPosition(10, File::YPadding);
-        for (int i = 1; i < File::Content.size(); i++) {
-            File::Content[i].text.setPosition(10, (File::Content[i].lineNumber) * File::YPadding);
+        for (int i = 1; i < File::Content.size(); i++) {            
+            File::Content[i].text.setPosition(10, (File::Content[i].lineNumber+1) * File::YPadding);
         }
 
         float x;
