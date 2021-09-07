@@ -58,7 +58,7 @@ int main()
     // run the program as long as the window is open
     while (window->isOpen())
     {
-        window->setFramerateLimit(60);
+        window->setFramerateLimit(300);
 
         // keep cursor.getCurrentLine up to date with the actual current line 
         // (note: cursor.getCurrentLine returns a copy as opposed to File::Content[cursor.getCurrentLine.lineNumber])

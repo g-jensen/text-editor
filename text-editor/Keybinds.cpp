@@ -142,6 +142,10 @@ void Keybinds::DefaultLeftArrow(Cursor& cursor)
 {
     if (cursor.lineIndex > 0) {
         cursor.lineIndex--;
+    } else if (cursor.lineIndex == 0 && cursor.getCurrentLine().lineNumber > 0) {
+        
+        cursor.decrementLine(1);
+        cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize();
     }
 }
 
@@ -149,6 +153,10 @@ void Keybinds::DefaultRightArrow(Cursor& cursor)
 {
     if (cursor.lineIndex < cursor.getCurrentLine().text.getString().getSize()) {
         cursor.lineIndex++;
+    }
+    else if (cursor.lineIndex == cursor.getCurrentLine().text.getString().getSize() && cursor.getCurrentLine().lineNumber < File::Content.size() - 1) {
+        cursor.lineIndex = 0;
+        cursor.incrementLine(1);
     }
 }
 
