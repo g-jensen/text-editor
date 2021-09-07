@@ -114,10 +114,8 @@ void Keybinds::DefaultInputAscii(Cursor& cursor, sf::Event event)
 
 void Keybinds::DefaultUpArrow(Cursor& cursor)
 {
-    // handle the cursor animation clock
-    cursor.resetCursorAnimation();
 
-    if (cursor.getCurrentLine().text.getString().getSize() > File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize()) {
+    if (cursor.lineIndex > File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize()) {
         cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize();
     }
 
@@ -129,10 +127,8 @@ void Keybinds::DefaultUpArrow(Cursor& cursor)
 
 void Keybinds::DefaultDownArrow(Cursor& cursor)
 {
-    // handle the cursor animation clock
-    cursor.resetCursorAnimation();
 
-    if (cursor.getCurrentLine().text.getString().getSize() > File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize()) {
+    if (cursor.lineIndex > File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize()) {
         cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize();
     }
 
@@ -144,7 +140,6 @@ void Keybinds::DefaultDownArrow(Cursor& cursor)
 
 void Keybinds::DefaultLeftArrow(Cursor& cursor)
 {
-    cursor.resetCursorAnimation();
     if (cursor.lineIndex > 0) {
         cursor.lineIndex--;
     }
@@ -152,7 +147,6 @@ void Keybinds::DefaultLeftArrow(Cursor& cursor)
 
 void Keybinds::DefaultRightArrow(Cursor& cursor)
 {
-    cursor.resetCursorAnimation();
     if (cursor.lineIndex < cursor.getCurrentLine().text.getString().getSize()) {
         cursor.lineIndex++;
     }
