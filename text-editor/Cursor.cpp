@@ -28,6 +28,11 @@ void Cursor::updateCursorAnimation()
 	}
 }
 
+void Cursor::setLineNumber(int n)
+{
+	this->currentLine.lineNumber = n;
+}
+
 void Cursor::incrementLine(int n)
 {
 	Line placeholder = Line(this->getCurrentLine().text.getString(), this->getCurrentLine().lineNumber + n);

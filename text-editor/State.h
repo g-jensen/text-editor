@@ -2,6 +2,6 @@
 
 enum class State {
 	Default,
-	InputBox,
+	NoInput
 };
 

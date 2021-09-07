@@ -28,7 +28,7 @@ void File::LoadFile(std::string path)
     if (myfile.is_open())
     {
         File::Content.clear();
-        int n = 1;
+        int n = 0;
         while (std::getline(myfile, data))
         {
             File::Content.push_back(Line(data, n));

@@ -11,10 +11,13 @@
 #include "State.h"
 #include "Keybinds.h"
 #include "UIHover.h"
+#include "FileExplorer.h"
 
 int main()
 {
-    #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+    // #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+
+    
 
     Keybinds::DeleteCharacter = 8;
     Keybinds::InsertNewLine = 13;
@@ -24,7 +27,7 @@ int main()
 
     // load icon
     sf::Image icon;
-    icon.loadFromFile("img/tree.png");
+    icon.loadFromFile("img/belp.png");
     
 
     // create the window
@@ -72,8 +75,11 @@ int main()
             // handle hovering over fileButton
             if (UIHover::ButtonHover(*fileButton, *window)) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    File::CurrentState = State::InputBox;
-                    fileInput->isOpen = true;
+                    File::CurrentState = State::NoInput;
+                    File::LoadFile(FileExplorer::Open());
+                    cursor.setLineNumber(0);
+                    cursor.lineIndex = 0;
+                    std::cout << File::Content[cursor.getCurrentLine().lineNumber].lineNumber << std::endl;
                 }
             }
 
@@ -114,24 +120,6 @@ int main()
                 }
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            if (File::CurrentState == State::InputBox) {
-                if (event.type == sf::Event::TextEntered) {
-                    if (event.text.unicode < 128) {
-                        // enter
-                        if (event.text.unicode == 13) {
-                            Keybinds::InputBoxEnter(*fileInput, cursor);
-                        }
-                        // backspace
-                        else if (event.text.unicode == 8) {
-                            Keybinds::InputBoxBackspace(*fileInput);
-                        }
-                        // input regular character
-                        else {
-                            Keybinds::InputBoxInputAscii(*fileInput, event);
-                        }
-                    }
-                }
-            }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
 

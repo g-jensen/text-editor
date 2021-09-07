@@ -16,6 +16,8 @@ public:
 	void resetCursorAnimation();
 	void updateCursorAnimation();
 
+	void setLineNumber(int n);
+
 	void incrementLine(int n);
 	void decrementLine(int n);
 
