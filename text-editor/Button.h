@@ -13,5 +13,6 @@ public:
 	bool contains(sf::Vector2i position);
 	sf::Text label;
 	sf::Color hoverColor;
+	sf::Color defaultColor;
 };
 

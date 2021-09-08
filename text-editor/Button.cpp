@@ -4,6 +4,8 @@ Button::Button(sf::Vector2f position, sf::Vector2f size)
 {
 	this->setSize(size);
 	this->setPosition(position);
+	this->defaultColor = sf::Color::White;
+	this->setFillColor(defaultColor);
 	this->hoverColor = sf::Color(this->getFillColor().r - 26, this->getFillColor().b - 26, this->getFillColor().g - 26);
 }
 

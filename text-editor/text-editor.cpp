@@ -12,6 +12,7 @@
 #include "Keybinds.h"
 #include "UIHover.h"
 #include "FileExplorer.h"
+#include "SettingsMenu.h"
 
 bool stringContains(std::string s, std::vector<std::string> v) {
     for (auto& i : v) {
@@ -57,9 +58,8 @@ int main()
     Button* fileButton = new Button();
     UIBuilder::buildFileButton(*fileButton);
 
-    // make file input pop-up box
-    TextInput* fileInput = new TextInput();
-    UIBuilder::buildFileInputBox(*fileInput);
+    Button* settingsButton = new Button();
+    UIBuilder::buildSettingsButton(*settingsButton);
 
     cursor.lineIndex = 0;
 
@@ -93,7 +93,13 @@ int main()
                     File::LoadFile(FileExplorer::Open());
                     cursor.setLineNumber(0);
                     cursor.lineIndex = 0;
-                    // std::cout << File::Content[cursor.getCurrentLine().lineNumber].lineNumber << std::endl;
+                }
+            }
+
+            // handle hovering over settingsButton
+            if (UIHover::ButtonHover(*settingsButton, *window)) {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    SettingsMenu::Open(200, 200);
                 }
             }
 
@@ -187,10 +193,7 @@ int main()
         }
 
         fileButton->draw(window);
-
-        if (fileInput->isOpen) {
-            fileInput->draw(window);
-        }
+        settingsButton->draw(window);
         
         // end the current frame
         window->display();
@@ -200,7 +203,7 @@ int main()
 
     // delete pointers
     delete fileButton;
-    delete fileInput;
+    delete settingsButton;
     delete window;
 
     // write to "output.txt"

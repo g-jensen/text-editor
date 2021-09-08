@@ -7,7 +7,7 @@ bool UIHover::ButtonHover(Button& button, sf::RenderWindow &window)
         return true;
     }
     else {
-        button.setFillColor(sf::Color::White);
+        button.setFillColor(button.defaultColor);
         return false;
     }
 }

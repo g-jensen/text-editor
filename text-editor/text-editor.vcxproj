@@ -150,6 +150,7 @@
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Keybinds.cpp" />
     <ClCompile Include="Line.cpp" />
+    <ClCompile Include="SettingsMenu.cpp" />
     <ClCompile Include="text-editor.cpp" />
     <ClCompile Include="TextInput.cpp" />
     <ClCompile Include="UIBuilder.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="FileExplorer.h" />
     <ClInclude Include="Keybinds.h" />
+    <ClInclude Include="SettingsMenu.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="IDrawable.h" />
     <ClInclude Include="File.h" />

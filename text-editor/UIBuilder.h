@@ -12,5 +12,6 @@ public:
 	/// <param name="textInput">Object that will be changed</param>
 	static void buildFileInputBox(TextInput &textInput);
 	static void buildFileButton(Button& button);
+	static void buildSettingsButton(Button& button);
 };
 
