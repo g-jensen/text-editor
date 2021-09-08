@@ -12,6 +12,7 @@ class File
 public:
 	static State CurrentState;
 	static std::vector<Line> Content;
+	static std::vector<std::string> DeleteBreaks;
 	static float YPadding;
 	static void WriteFileToOutput();
 	static void LoadFile(std::string path);

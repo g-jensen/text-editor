@@ -13,6 +13,16 @@
 #include "UIHover.h"
 #include "FileExplorer.h"
 
+bool stringContains(std::string s, std::vector<std::string> v) {
+    for (auto& i : v) {
+        if (s == i) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 int main()
 {
     // #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
@@ -55,6 +65,10 @@ int main()
 
     window->setFramerateLimit(300);
 
+    /*for (auto& i : File::DeleteBreaks) {
+        std::cout << i << " , ";
+    }*/
+
     // run the program as long as the window is open
     while (window->isOpen())
     {
@@ -79,7 +93,7 @@ int main()
                     File::LoadFile(FileExplorer::Open());
                     cursor.setLineNumber(0);
                     cursor.lineIndex = 0;
-                    std::cout << File::Content[cursor.getCurrentLine().lineNumber].lineNumber << std::endl;
+                    // std::cout << File::Content[cursor.getCurrentLine().lineNumber].lineNumber << std::endl;
                 }
             }
 
@@ -88,11 +102,30 @@ int main()
             if (File::CurrentState == State::Default) {
 
                 if (event.type == sf::Event::TextEntered) {
-
                     if (event.text.unicode < 128) {
                         // if press backspace
                         if (event.text.unicode == Keybinds::DeleteCharacter) {
                             Keybinds::DefaultBackspace(cursor);
+                        }
+                        // ctrl + backspace
+                        else if (event.text.unicode == 127) {
+                            // std::string string = cursor.getCurrentLine().text.getString().toAnsiString();
+                            if (cursor.lineIndex == 0) {
+                                Keybinds::DefaultBackspace(cursor);
+                            }
+                            else if (stringContains(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[cursor.lineIndex - 1]), File::DeleteBreaks)) {
+                                Keybinds::DefaultBackspace(cursor);
+                            }
+                            else {
+                                for (int i = cursor.lineIndex - 1; i >= 0; i--) {
+                                    if (!stringContains(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[i]), File::DeleteBreaks)) {
+                                        Keybinds::DefaultBackspace(cursor);
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                            }
                         }
                         // if pressed enter
                         else if (event.text.unicode == Keybinds::InsertNewLine) {
@@ -101,7 +134,6 @@ int main()
                         // normal ascii
                         else {
                             Keybinds::DefaultInputAscii(cursor,event);
-                            
                         }
                     }
                 }

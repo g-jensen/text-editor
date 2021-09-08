@@ -4,6 +4,10 @@ State File::CurrentState = State::Default;
 
 std::vector<Line> File::Content = {};
 
+std::vector<std::string> File::DeleteBreaks = {
+    ""," ", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "=", "_", "+", "[" , "]", "{", "}", "\\", "|", ";", ":", "\'", "\"", ",", ".", "/", "<", ">", "?"
+};
+
 float File::YPadding = 30.f;
 
 void File::WriteFileToOutput()
