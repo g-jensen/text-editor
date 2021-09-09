@@ -6,7 +6,7 @@ sf::Font Font::defaultFont;
 void Font::load()
 {
 	if (!Font::hasBeenLoaded) {
-		Font::defaultFont.loadFromFile("fonts/UbuntuMono-Regular.ttf");
+		Font::defaultFont.loadFromFile(Theme::fontPath);
 		Font::hasBeenLoaded = true;
 	}
 }

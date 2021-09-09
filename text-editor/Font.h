@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Theme.h"
 #include <SFML/Graphics/Font.hpp>
 
 class Font

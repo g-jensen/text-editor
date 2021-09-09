@@ -3,11 +3,11 @@
 bool UIHover::ButtonHover(Button& button, sf::RenderWindow &window)
 {
     if (button.contains(sf::Mouse::getPosition(window))) {
-        button.setFillColor(button.hoverColor);
+        button.setFillColor(Theme::buttonHoverColor);
         return true;
     }
     else {
-        button.setFillColor(button.defaultColor);
+        button.setFillColor(Theme::buttonFillColor);
         return false;
     }
 }

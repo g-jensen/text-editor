@@ -2,6 +2,7 @@
 
 #include "TextInput.h"
 #include "Button.h"
+#include "Theme.h"
 
 class UIBuilder
 {

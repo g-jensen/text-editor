@@ -3,17 +3,7 @@
 #include <ostream>
 #include <unordered_map>
 
-#include "Cursor.h"
-#include "File.h"
-#include "Button.h"
-#include "TextInput.h"
-#include "UIBuilder.h"
-#include "State.h"
-#include "Keybinds.h"
-#include "UIHover.h"
-#include "FileExplorer.h"
-#include "SettingsMenu.h"
-#include "Config.h"
+#include "text-editor.h"
 
 bool stringContains(std::string s, std::vector<std::string> v) {
     for (auto& i : v) {
@@ -31,6 +21,17 @@ int main()
 
     // load config.json
     Config::Load();
+    Keybinds::DeleteCharacter = Config::DeleteCharacter;
+    Keybinds::DeleteSentence = Config::DeleteSentence;
+    Keybinds::InsertNewLine = Config::InsertNewLine;
+    Keybinds::CursorUp = Config::CursorUp;
+    Keybinds::CursorDown = Config::CursorDown;
+    Keybinds::CursorLeft = Config::CursorLeft;
+    Keybinds::CursorRight = Config::CursorRight;
+
+
+    // load theme
+    Theme::Load();
 
     // loads the default font
     Font::load();
@@ -48,6 +49,7 @@ int main()
     File::CurrentState = State::Default;
 
     Cursor cursor = Cursor(sf::Vector2f(10, File::YPadding), sf::Vector2f(15, 5));
+    cursor.setFillColor(Theme::cursorColor);
 
     // initialize first line of file
     File::Content.push_back(Line("",0));
@@ -181,10 +183,11 @@ int main()
         ));
 
         // clear the window with black color
-        window->clear(sf::Color::Black);
+        window->clear(Theme::backgroundColor);
 
         // draw everything here...
         for (auto item : File::Content) {
+            item.text.setFillColor(Theme::textColor);
             window->draw(item.text);
         }
 

@@ -3,7 +3,6 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <iostream>
-#include "Keybinds.h"
 
 class Config
 {
@@ -11,7 +10,15 @@ public:
 	static void Load();
 	static int WindowWidth;
 	static int WindowHeight;
-private:
-	static std::vector<std::string> vars;
+	static std::string ThemePath;
+
+    static int DeleteCharacter;
+    static int DeleteSentence;
+    static int InsertNewLine;
+
+    static int CursorUp;
+    static int CursorDown;
+    static int CursorLeft;
+    static int CursorRight;
 };
 

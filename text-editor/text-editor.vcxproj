@@ -154,6 +154,7 @@
     <ClCompile Include="SettingsMenu.cpp" />
     <ClCompile Include="text-editor.cpp" />
     <ClCompile Include="TextInput.cpp" />
+    <ClCompile Include="Theme.cpp" />
     <ClCompile Include="UIBuilder.cpp" />
     <ClCompile Include="UIHover.cpp" />
   </ItemGroup>
@@ -169,7 +170,9 @@
     <ClInclude Include="File.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="text-editor.h" />
     <ClInclude Include="TextInput.h" />
+    <ClInclude Include="Theme.h" />
     <ClInclude Include="UIBuilder.h" />
     <ClInclude Include="UIHover.h" />
   </ItemGroup>
