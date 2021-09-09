@@ -1,0 +1,40 @@
+{
+
+  "font": "fonts/UbuntuMono-Regular.ttf",
+
+  "background-color": {
+    "r": "0",
+    "g": "0",
+    "b": "0"
+  },
+
+  "text-color": {
+    "r": "255",
+    "g": "255",
+    "b": "255"
+  },
+
+  "cursor-color": {
+    "r": "255",
+    "g": "255",
+    "b": "255"
+  },
+
+  "button-fill-color": {
+    "r": "0",
+    "g": "0",
+    "b": "0"
+  },
+
+  "button-hover-color": {
+    "r": "105",
+    "g": "105",
+    "b": "105"
+  },
+
+  "button-outline-color": {
+    "r": "148",
+    "g": "0",
+    "b": "211"
+  }
+}

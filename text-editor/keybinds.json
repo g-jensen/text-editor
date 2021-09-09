@@ -1,0 +1,9 @@
+{
+  "DELETE_CHAR": "8",
+  "DELETE_SENTENCE": "127",
+  "INSERT_NEWLINE": "13",
+  "CURSOR_UP": "73",
+  "CURSOR_DOWN": "74",
+  "CURSOR_LEFT": "71",
+  "CURSOR_RIGHT": "72"
+}
