@@ -5,6 +5,8 @@
 #include "TextInput.h"
 #include <SFML/Window/Event.hpp>
 #include <unordered_map>
+#include <nlohmann/json.hpp>
+
 
 class Keybinds
 {
@@ -19,6 +21,8 @@ public:
 	static sf::Uint32 CursorDown;
 	static sf::Uint32 CursorLeft;
 	static sf::Uint32 CursorRight;
+
+	static void Load();
 
 	static void DefaultBackspace(Cursor& cursor);
 	static void DefaultEnter(Cursor& cursor);

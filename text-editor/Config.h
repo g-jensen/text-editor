@@ -11,14 +11,5 @@ public:
 	static int WindowWidth;
 	static int WindowHeight;
 	static std::string ThemePath;
-
-    static int DeleteCharacter;
-    static int DeleteSentence;
-    static int InsertNewLine;
-
-    static int CursorUp;
-    static int CursorDown;
-    static int CursorLeft;
-    static int CursorRight;
 };
 

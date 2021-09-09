@@ -21,14 +21,9 @@ int main()
 
     // load config.json
     Config::Load();
-    Keybinds::DeleteCharacter = Config::DeleteCharacter;
-    Keybinds::DeleteSentence = Config::DeleteSentence;
-    Keybinds::InsertNewLine = Config::InsertNewLine;
-    Keybinds::CursorUp = Config::CursorUp;
-    Keybinds::CursorDown = Config::CursorDown;
-    Keybinds::CursorLeft = Config::CursorLeft;
-    Keybinds::CursorRight = Config::CursorRight;
 
+    // load keybinds.json
+    Keybinds::Load();
 
     // load theme
     Theme::Load();
