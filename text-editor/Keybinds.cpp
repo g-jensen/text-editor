@@ -32,6 +32,7 @@ std::unordered_map<sf::Uint32, std::string> Keybinds::ComboKeyCodes
 };
 
 sf::Uint32 Keybinds::DeleteCharacter = 0;
+sf::Uint32 Keybinds::DeleteSentence = 0;
 sf::Uint32 Keybinds::InsertNewLine = 0;
 
 sf::Uint32 Keybinds::CursorUp = 0;

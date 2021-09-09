@@ -13,6 +13,7 @@ public:
 	static std::unordered_map<sf::Uint32,  std::string> ComboKeyCodes;
 
 	static sf::Uint32 DeleteCharacter;
+	static sf::Uint32 DeleteSentence;
 	static sf::Uint32 InsertNewLine;
 	static sf::Uint32 CursorUp;
 	static sf::Uint32 CursorDown;

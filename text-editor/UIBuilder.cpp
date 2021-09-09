@@ -14,8 +14,10 @@ void UIBuilder::buildFileButton(Button &button)
     float outlineThickness = 3.f;
     button = Button(sf::Vector2f(0 + outlineThickness,0 + outlineThickness),sf::Vector2f(50,20));
     button.defaultColor = sf::Color::Black;
+    button.hoverColor = sf::Color(105, 105, 105);
     button.setOutlineColor(sf::Color(148, 0, 211));
     button.setOutlineThickness(outlineThickness);
+    button.setFillColor(button.defaultColor);
     button.label.setFont(Font::defaultFont);
     button.label.setPosition(sf::Vector2f(0 + outlineThickness, 0 + outlineThickness));
     button.label.setCharacterSize(20);
@@ -27,8 +29,10 @@ void UIBuilder::buildSettingsButton(Button& button) {
     float outlineThickness = 3.f;
     button = Button(sf::Vector2f(50 + outlineThickness, 0 + outlineThickness), sf::Vector2f(80, 20));
     button.defaultColor = sf::Color::Black;
+    button.hoverColor = sf::Color(105, 105, 105);
     button.setOutlineColor(sf::Color(148, 0, 211));
     button.setOutlineThickness(outlineThickness);
+    button.setFillColor(button.defaultColor);
     button.label.setFont(Font::defaultFont);
     button.label.setPosition(sf::Vector2f(50 + outlineThickness, 0 + outlineThickness));
     button.label.setCharacterSize(20);

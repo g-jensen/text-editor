@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Config.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="FileExplorer.cpp" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="FileExplorer.h" />
     <ClInclude Include="Keybinds.h" />
@@ -171,7 +173,17 @@
     <ClInclude Include="UIBuilder.h" />
     <ClInclude Include="UIHover.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\nlohmann.json.3.10.2\build\native\nlohmann.json.targets" Condition="Exists('..\packages\nlohmann.json.3.10.2\build\native\nlohmann.json.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\nlohmann.json.3.10.2\build\native\nlohmann.json.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\nlohmann.json.3.10.2\build\native\nlohmann.json.targets'))" />
+  </Target>
 </Project>

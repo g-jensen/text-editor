@@ -13,6 +13,7 @@
 #include "UIHover.h"
 #include "FileExplorer.h"
 #include "SettingsMenu.h"
+#include "Config.h"
 
 bool stringContains(std::string s, std::vector<std::string> v) {
     for (auto& i : v) {
@@ -28,10 +29,8 @@ int main()
 {
     // #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
-    
-
-    Keybinds::DeleteCharacter = 8;
-    Keybinds::InsertNewLine = 13;
+    // load config.json
+    Config::Load();
 
     // loads the default font
     Font::load();
@@ -42,7 +41,7 @@ int main()
     
 
     // create the window
-    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(800, 600), "Text Editor",sf::Style::Default);
+    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(Config::WindowWidth, Config::WindowHeight), "Text Editor",sf::Style::Default);
 
     window->setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());
 
@@ -106,15 +105,14 @@ int main()
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             cursor.isVisible = true;
             if (File::CurrentState == State::Default) {
-
-                if (event.type == sf::Event::TextEntered) {
+                if (event.type == sf::Event::TextEntered) {                    
                     if (event.text.unicode < 128) {
                         // if press backspace
                         if (event.text.unicode == Keybinds::DeleteCharacter) {
                             Keybinds::DefaultBackspace(cursor);
                         }
                         // ctrl + backspace
-                        else if (event.text.unicode == 127) {
+                        else if (event.text.unicode == Keybinds::DeleteSentence) {
                             // std::string string = cursor.getCurrentLine().text.getString().toAnsiString();
                             if (cursor.lineIndex == 0) {
                                 Keybinds::DefaultBackspace(cursor);
@@ -143,17 +141,19 @@ int main()
                         }
                     }
                 }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                    Keybinds::DefaultUpArrow(cursor);
-                }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                    Keybinds::DefaultDownArrow(cursor);
-                }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                    Keybinds::DefaultLeftArrow(cursor);
-                }
-                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                    Keybinds::DefaultRightArrow(cursor);
+                else if (event.type == sf::Event::KeyPressed) {
+                    if (event.text.unicode == Keybinds::CursorUp) {
+                        Keybinds::DefaultUpArrow(cursor);
+                    }
+                    else if (event.text.unicode == Keybinds::CursorDown) {
+                        Keybinds::DefaultDownArrow(cursor);
+                    }
+                    else if (event.text.unicode == Keybinds::CursorLeft) {
+                        Keybinds::DefaultLeftArrow(cursor);
+                    }
+                    else if (event.text.unicode == Keybinds::CursorRight) {
+                        Keybinds::DefaultRightArrow(cursor);
+                    }
                 }
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
