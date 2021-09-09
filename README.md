@@ -2,4 +2,4 @@
 
 vim-style text editor.
 
-download: Release.zip in the repo or <a href="https://mega.nz/folder/kLZ2VZaT#zkthHiXY01ihIkSQAt1i2w" target="_blank">mega link to stable build(windows)</a>
+download: Release.zip in the repo or <a href="https://www.mediafire.com/file/ufjyn3peke1met4/Release.zip/file" target="_blank">mediafire link to stable  windows build</a>
