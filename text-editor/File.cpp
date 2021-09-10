@@ -42,4 +42,7 @@ void File::LoadFile(std::string path)
         myfile.close();
     }
     else { std::cout << "Unable to open \"" + path + "\""; }
+    if (File::Content.size() == 0) {
+        File::Content.push_back(Line("",0));
+    }
 }

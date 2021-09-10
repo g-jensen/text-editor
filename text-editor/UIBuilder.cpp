@@ -19,7 +19,7 @@ void UIBuilder::buildFileButton(Button &button)
     button.label.setFont(Font::defaultFont);
     button.label.setPosition(sf::Vector2f(0 + outlineThickness, 0 + outlineThickness));
     button.label.setCharacterSize(20);
-    button.label.setOutlineColor(sf::Color::White);
+    button.label.setFillColor(Theme::textColor);
     button.label.setString("file");
 }
 
@@ -32,6 +32,6 @@ void UIBuilder::buildSettingsButton(Button& button) {
     button.label.setFont(Font::defaultFont);
     button.label.setPosition(sf::Vector2f(50 + outlineThickness, 0 + outlineThickness));
     button.label.setCharacterSize(20);
-    button.label.setOutlineColor(sf::Color::White);
+    button.label.setFillColor(Theme::textColor);
     button.label.setString("settings");
 }
