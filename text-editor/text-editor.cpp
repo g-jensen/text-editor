@@ -5,7 +5,7 @@
 
 #include "text-editor.h"
 
-bool stringContains(std::string s, std::vector<std::string> v) {
+bool isContained(std::string s, std::vector<std::string> v) {
     for (auto& i : v) {
         if (s == i) {
             return true;
@@ -61,10 +61,6 @@ int main()
 
     window->setFramerateLimit(300);
 
-    /*for (auto& i : File::DeleteBreaks) {
-        std::cout << i << " , ";
-    }*/
-
     // run the program as long as the window is open
     while (window->isOpen())
     {
@@ -114,12 +110,12 @@ int main()
                             if (cursor.lineIndex == 0) {
                                 Keybinds::DefaultBackspace(cursor);
                             }
-                            else if (stringContains(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[cursor.lineIndex - 1]), File::DeleteBreaks)) {
+                            else if (isContained(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[cursor.lineIndex - 1]), File::DeleteBreaks)) {
                                 Keybinds::DefaultBackspace(cursor);
                             }
                             else {
                                 for (int i = cursor.lineIndex - 1; i >= 0; i--) {
-                                    if (!stringContains(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[i]), File::DeleteBreaks)) {
+                                    if (!isContained(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[i]), File::DeleteBreaks)) {
                                         Keybinds::DefaultBackspace(cursor);
                                     }
                                     else {
@@ -196,8 +192,6 @@ int main()
         // end the current frame
         window->display();
     }
-
-    //file.close();
 
     // delete pointers
     delete fileButton;
