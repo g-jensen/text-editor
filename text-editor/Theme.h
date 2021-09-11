@@ -9,6 +9,9 @@
 class Theme
 {
 public:
+	/// <summary>
+	/// Loads the theme file determined in config.json
+	/// </summary>
 	static void Load();
 	static std::string fontPath;
 	static sf::Color backgroundColor;

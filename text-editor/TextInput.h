@@ -8,6 +8,9 @@
 #include "IDrawable.h"
 #include "Font.h"
 
+/// <summary>
+/// DEPRECATED | Opens a text input box
+/// </summary>
 class TextInput : public IDrawable
 {
 public:

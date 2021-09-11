@@ -13,6 +13,10 @@
 class FileExplorer
 {
 public:
+	/// <summary>
+	/// Opens the file explorer to choose a file
+	/// </summary>
+	/// <returns>Path to the file chosen</returns>
 	static std::string Open();
 };
 

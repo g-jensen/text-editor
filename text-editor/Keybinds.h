@@ -11,9 +11,13 @@
 class Keybinds
 {
 public:
-
+	/// <summary>
+	/// List of key combinations of ctrl + all letters of the alphabet
+	/// </summary>
 	static std::unordered_map<sf::Uint32,  std::string> ComboKeyCodes;
 
+	///////////////////////////////////
+	// Key codes for the respective functions
 	static sf::Uint32 DeleteCharacter;
 	static sf::Uint32 DeleteSentence;
 	static sf::Uint32 InsertNewLine;
@@ -21,19 +25,40 @@ public:
 	static sf::Uint32 CursorDown;
 	static sf::Uint32 CursorLeft;
 	static sf::Uint32 CursorRight;
+	///////////////////////////////////
 
+	/// <summary>
+	/// Loads keybinds from keybinds.json
+	/// </summary>
 	static void Load();
 
-	static void DefaultBackspace(Cursor& cursor);
-	static void DefaultEnter(Cursor& cursor);
+	/// <summary>
+	/// Deletes a character in the default state
+	/// </summary>
+	static void DefaultDeleteCharacter(Cursor& cursor);
+	/// <summary>
+	/// Inserts a new line in the default state
+	/// </summary>
+	static void DefaultInsertNewLine(Cursor& cursor);
+	/// <summary>
+	/// Inputs an ascii character in the default state
+	/// </summary>
 	static void DefaultInputAscii(Cursor& cursor, sf::Event event);
-	static void DefaultUpArrow(Cursor& cursor);
-	static void DefaultDownArrow(Cursor& cursor);
-	static void DefaultLeftArrow(Cursor& cursor);
-	static void DefaultRightArrow(Cursor& cursor);
-
-	static void InputBoxBackspace(TextInput& textInput);
-	static void InputBoxEnter(TextInput& textInput, Cursor& cursor);
-	static void InputBoxInputAscii(TextInput& textInput, sf::Event event);
+	/// <summary>
+	/// Moves the cursor up in the default state
+	/// </summary>
+	static void DefaultCursorUp(Cursor& cursor);
+	/// <summary>
+	/// Moves the cursor down in the default state
+	/// </summary>
+	static void DefaultCursorDown(Cursor& cursor);
+	/// <summary>
+	/// Moves the cursor left in the default state
+	/// </summary>
+	static void DefaultCursorLeft(Cursor& cursor);
+	/// <summary>
+	/// Moves the cursor right in the default state
+	/// </summary>
+	static void DefaultCursorRight(Cursor& cursor);
 };
 

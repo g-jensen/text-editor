@@ -24,7 +24,5 @@ void Config::Load()
     Config::WindowHeight = stoi((std::string)json["WINDOW_HEIGHT"]);
     Config::WindowWidth = stoi((std::string)json["WINDOW_WIDTH"]);
 
-    
-
     Config::ThemePath = (std::string)json["THEME"];
 }

@@ -35,3 +35,16 @@ void UIBuilder::buildSettingsButton(Button& button) {
     button.label.setFillColor(Theme::textColor);
     button.label.setString("settings");
 }
+
+void UIBuilder::buildSnippitsButton(Button& button) {
+    float outlineThickness = 3.f;
+    button = Button(sf::Vector2f(80 + 50 + outlineThickness, 0 + outlineThickness), sf::Vector2f(80, 20));
+    button.setOutlineColor(Theme::buttonOutlineColor);
+    button.setOutlineThickness(outlineThickness);
+    button.setFillColor(Theme::buttonFillColor);
+    button.label.setFont(Font::defaultFont);
+    button.label.setPosition(sf::Vector2f(80 + 50 + outlineThickness, 0 + outlineThickness));
+    button.label.setCharacterSize(20);
+    button.label.setFillColor(Theme::textColor);
+    button.label.setString("snippits");
+}

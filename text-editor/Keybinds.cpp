@@ -66,7 +66,7 @@ void Keybinds::Load()
     Keybinds::CursorRight = stoi((std::string)json["CURSOR_RIGHT"]);
 }
 
-void Keybinds::DefaultBackspace(Cursor& cursor)
+void Keybinds::DefaultDeleteCharacter(Cursor& cursor)
 {
     // if the line is empty
     if (cursor.getCurrentLine().isEmpty() && cursor.getCurrentLine().lineNumber != 0) {
@@ -109,7 +109,7 @@ void Keybinds::DefaultBackspace(Cursor& cursor)
     cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
 }
 
-void Keybinds::DefaultEnter(Cursor& cursor)
+void Keybinds::DefaultInsertNewLine(Cursor& cursor)
 {
     std::string secondHalf = File::Content[cursor.getCurrentLine().lineNumber].text.getString().substring(cursor.lineIndex,File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize());
     File::Content[cursor.getCurrentLine().lineNumber].text.setString(File::Content[cursor.getCurrentLine().lineNumber].text.getString().substring(0,cursor.lineIndex));
@@ -139,7 +139,7 @@ void Keybinds::DefaultInputAscii(Cursor& cursor, sf::Event event)
     cursor.lineIndex++;
 }
 
-void Keybinds::DefaultUpArrow(Cursor& cursor)
+void Keybinds::DefaultCursorUp(Cursor& cursor)
 {
 
     if (cursor.lineIndex > File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize()) {
@@ -152,7 +152,7 @@ void Keybinds::DefaultUpArrow(Cursor& cursor)
     }
 }
 
-void Keybinds::DefaultDownArrow(Cursor& cursor)
+void Keybinds::DefaultCursorDown(Cursor& cursor)
 {
 
     if (cursor.lineIndex > File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize()) {
@@ -165,7 +165,7 @@ void Keybinds::DefaultDownArrow(Cursor& cursor)
     }
 }
 
-void Keybinds::DefaultLeftArrow(Cursor& cursor)
+void Keybinds::DefaultCursorLeft(Cursor& cursor)
 {
     if (cursor.lineIndex > 0) {
         cursor.lineIndex--;
@@ -176,7 +176,7 @@ void Keybinds::DefaultLeftArrow(Cursor& cursor)
     }
 }
 
-void Keybinds::DefaultRightArrow(Cursor& cursor)
+void Keybinds::DefaultCursorRight(Cursor& cursor)
 {
     if (cursor.lineIndex < cursor.getCurrentLine().text.getString().getSize()) {
         cursor.lineIndex++;
@@ -185,22 +185,4 @@ void Keybinds::DefaultRightArrow(Cursor& cursor)
         cursor.lineIndex = 0;
         cursor.incrementLine(1);
     }
-}
-
-void Keybinds::InputBoxBackspace(TextInput& textInput)
-{
-    textInput.value.setString(textInput.value.getString().substring(0, textInput.value.getString().getSize() - 1));
-}
-
-void Keybinds::InputBoxEnter(TextInput& textInput, Cursor& cursor)
-{
-    File::LoadFile((std::string)textInput.value.getString());
-    cursor.setCurrentLine(Line(File::Content[0].text.getString(), 0));
-    File::CurrentState = State::Default;
-    textInput.isOpen = false;
-}
-
-void Keybinds::InputBoxInputAscii(TextInput& textInput, sf::Event event)
-{
-    textInput.value.setString(textInput.value.getString() + static_cast<char>(event.text.unicode));
 }

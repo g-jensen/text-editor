@@ -2,6 +2,8 @@
 
 std::string FileExplorer::Open()
 {
+    // copied from stack overflow windows api is cancer
+
     char filename[MAX_PATH];
 
     OPENFILENAME ofn;

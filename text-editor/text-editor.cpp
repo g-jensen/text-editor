@@ -1,3 +1,15 @@
+/*
+    * Minimal-style text editor by Greg Jensen:
+        - https://github.com/g-jensen/text-editor
+
+    * Rendering library used:
+        - https://www.sfml-dev.org/
+        - https://github.com/SFML/SFML
+
+    * JSON parsing library used:
+        - https://github.com/nlohmann/json
+*/
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <ostream>
@@ -54,8 +66,13 @@ int main()
     Button* fileButton = new Button();
     UIBuilder::buildFileButton(*fileButton);
 
+    // make settings button
     Button* settingsButton = new Button();
     UIBuilder::buildSettingsButton(*settingsButton);
+
+    // make snippits button
+    Button* snippitButton = new Button();
+    UIBuilder::buildSnippitsButton(*snippitButton);
 
     cursor.lineIndex = 0;
 
@@ -95,6 +112,8 @@ int main()
                 }
             }
 
+            if (UIHover::ButtonHover(*snippitButton,*window)) {}
+
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             cursor.isVisible = true;
             if (File::CurrentState == State::Default) {
@@ -102,21 +121,21 @@ int main()
                     if (event.text.unicode < 128) {
                         // if press backspace
                         if (event.text.unicode == Keybinds::DeleteCharacter) {
-                            Keybinds::DefaultBackspace(cursor);
+                            Keybinds::DefaultDeleteCharacter(cursor);
                         }
                         // ctrl + backspace
                         else if (event.text.unicode == Keybinds::DeleteSentence) {
                             // std::string string = cursor.getCurrentLine().text.getString().toAnsiString();
                             if (cursor.lineIndex == 0) {
-                                Keybinds::DefaultBackspace(cursor);
+                                Keybinds::DefaultDeleteCharacter(cursor);
                             }
                             else if (isContained(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[cursor.lineIndex - 1]), File::DeleteBreaks)) {
-                                Keybinds::DefaultBackspace(cursor);
+                                Keybinds::DefaultDeleteCharacter(cursor);
                             }
                             else {
                                 for (int i = cursor.lineIndex - 1; i >= 0; i--) {
                                     if (!isContained(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[i]), File::DeleteBreaks)) {
-                                        Keybinds::DefaultBackspace(cursor);
+                                        Keybinds::DefaultDeleteCharacter(cursor);
                                     }
                                     else {
                                         break;
@@ -126,7 +145,7 @@ int main()
                         }
                         // if pressed enter
                         else if (event.text.unicode == Keybinds::InsertNewLine) {
-                            Keybinds::DefaultEnter(cursor);
+                            Keybinds::DefaultInsertNewLine(cursor);
                         }
                         // normal ascii
                         else {
@@ -136,16 +155,16 @@ int main()
                 }
                 else if (event.type == sf::Event::KeyPressed) {
                     if (event.text.unicode == Keybinds::CursorUp) {
-                        Keybinds::DefaultUpArrow(cursor);
+                        Keybinds::DefaultCursorUp(cursor);
                     }
                     else if (event.text.unicode == Keybinds::CursorDown) {
-                        Keybinds::DefaultDownArrow(cursor);
+                        Keybinds::DefaultCursorDown(cursor);
                     }
                     else if (event.text.unicode == Keybinds::CursorLeft) {
-                        Keybinds::DefaultLeftArrow(cursor);
+                        Keybinds::DefaultCursorLeft(cursor);
                     }
                     else if (event.text.unicode == Keybinds::CursorRight) {
-                        Keybinds::DefaultRightArrow(cursor);
+                        Keybinds::DefaultCursorRight(cursor);
                     }
                 }
             }
@@ -188,6 +207,7 @@ int main()
 
         fileButton->draw(window);
         settingsButton->draw(window);
+        snippitButton->draw(window);
         
         // end the current frame
         window->display();
@@ -196,6 +216,7 @@ int main()
     // delete pointers
     delete fileButton;
     delete settingsButton;
+    delete snippitButton;
     delete window;
 
     // write to "output.txt"
