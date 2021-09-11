@@ -3,6 +3,7 @@
 #include "TextInput.h"
 #include "Button.h"
 #include "Theme.h"
+#include "File.h"
 
 class UIBuilder
 {
@@ -27,5 +28,10 @@ public:
 	/// </summary>
 	/// <param name="button">Object that will be changed</param>
 	static void buildSnippitsButton(Button& button);
+	/// <summary>
+	/// DEPRECATED | Change button to object with pre-defined values for an exit button
+	/// </summary>
+	/// <param name="button">Object that will be changed</param>
+	static void buildExitButton(Button& button);
 };
 

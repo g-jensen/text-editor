@@ -40,6 +40,9 @@ sf::Uint32 Keybinds::CursorDown = 0;
 sf::Uint32 Keybinds::CursorLeft = 0;
 sf::Uint32 Keybinds::CursorRight = 0;
 
+
+sf::Uint32 Keybinds::SaveFile = 0;
+
 void Keybinds::Load()
 {
     std::string line;
@@ -64,6 +67,9 @@ void Keybinds::Load()
     Keybinds::CursorDown = stoi((std::string)json["CURSOR_DOWN"]);
     Keybinds::CursorLeft = stoi((std::string)json["CURSOR_LEFT"]);
     Keybinds::CursorRight = stoi((std::string)json["CURSOR_RIGHT"]);
+
+    Keybinds::SaveFile = stoi((std::string)json["SAVE_FILE"]);
+
 }
 
 void Keybinds::DefaultDeleteCharacter(Cursor& cursor)

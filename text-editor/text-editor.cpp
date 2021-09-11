@@ -10,11 +10,11 @@
         - https://github.com/nlohmann/json
 */
 
-#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <ostream>
 #include <unordered_map>
 
+#include <SFML/Graphics.hpp>
 #include "text-editor.h"
 
 bool isContained(std::string s, std::vector<std::string> v) {
@@ -25,7 +25,6 @@ bool isContained(std::string s, std::vector<std::string> v) {
     }
     return false;
 }
-
 
 int main()
 {
@@ -49,9 +48,9 @@ int main()
     
 
     // create the window
-    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(Config::WindowWidth, Config::WindowHeight), "Text Editor",sf::Style::Default);
+    File::window = new sf::RenderWindow(sf::VideoMode(Config::WindowWidth, Config::WindowHeight), "Text Editor",sf::Style::Default);
 
-    window->setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());
+    File::window->setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());
 
     File::CurrentState = State::Default;
 
@@ -76,27 +75,35 @@ int main()
 
     cursor.lineIndex = 0;
 
-    window->setFramerateLimit(300);
+    File::window->setFramerateLimit(300);
 
     // run the program as long as the window is open
-    while (window->isOpen())
+    while (File::window->isOpen())
     {
-        window->setFramerateLimit(300);
+        File::window->setFramerateLimit(300);
 
         // keep cursor.getCurrentLine up to date with the actual current line 
         // (note: cursor.getCurrentLine returns a copy as opposed to File::Content[cursor.getCurrentLine.lineNumber])
         cursor.setCurrentLine(Line(File::Content[cursor.getCurrentLine().lineNumber].text.getString(), cursor.getCurrentLine().lineNumber));
 
         sf::Event event;
-        while (window->pollEvent(event))
+        while (File::window->pollEvent(event))
         {
+
+            if (event.type == sf::Event::Resized)
+            {
+                // update the view to the new size of the window
+                sf::FloatRect visibleArea(0.f, 0.f, (float)event.size.width, (float)event.size.height);
+                File::window->setView(sf::View(visibleArea));
+            }
+
             // "close requested" event: we close the window
             if (event.type == sf::Event::Closed) {
-                window->close();
+                File::window->close();
             }
 
             // handle hovering over fileButton
-            if (UIHover::ButtonHover(*fileButton, *window)) {
+            if (UIHover::ButtonHover(*fileButton, *File::window)) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     File::CurrentState = State::NoInput;
                     File::LoadFile(FileExplorer::Open());
@@ -106,54 +113,57 @@ int main()
             }
 
             // handle hovering over settingsButton
-            if (UIHover::ButtonHover(*settingsButton, *window)) {
+            if (UIHover::ButtonHover(*settingsButton, *File::window)) {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     SettingsMenu::Open(200, 200);
                 }
             }
 
-            if (UIHover::ButtonHover(*snippitButton,*window)) {}
+            if (UIHover::ButtonHover(*snippitButton,*File::window)) {}
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             cursor.isVisible = true;
             if (File::CurrentState == State::Default) {
-                if (event.type == sf::Event::TextEntered) {                    
-                    if (event.text.unicode < 128) {
-                        // if press backspace
-                        if (event.text.unicode == Keybinds::DeleteCharacter) {
+                if (event.type == sf::Event::TextEntered) {
+                    // if press backspace
+                    if (event.text.unicode == Keybinds::DeleteCharacter) {
+                        Keybinds::DefaultDeleteCharacter(cursor);
+                    }
+                    // ctrl + backspace
+                    else if (event.text.unicode == Keybinds::DeleteSentence) {
+                        // std::string string = cursor.getCurrentLine().text.getString().toAnsiString();
+                        if (cursor.lineIndex == 0) {
                             Keybinds::DefaultDeleteCharacter(cursor);
                         }
-                        // ctrl + backspace
-                        else if (event.text.unicode == Keybinds::DeleteSentence) {
-                            // std::string string = cursor.getCurrentLine().text.getString().toAnsiString();
-                            if (cursor.lineIndex == 0) {
-                                Keybinds::DefaultDeleteCharacter(cursor);
-                            }
-                            else if (isContained(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[cursor.lineIndex - 1]), File::DeleteBreaks)) {
-                                Keybinds::DefaultDeleteCharacter(cursor);
-                            }
-                            else {
-                                for (int i = cursor.lineIndex - 1; i >= 0; i--) {
-                                    if (!isContained(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[i]), File::DeleteBreaks)) {
-                                        Keybinds::DefaultDeleteCharacter(cursor);
-                                    }
-                                    else {
-                                        break;
-                                    }
+                        else if (isContained(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[cursor.lineIndex - 1]), File::DeleteBreaks)) {
+                            Keybinds::DefaultDeleteCharacter(cursor);
+                        }
+                        else {
+                            for (int i = cursor.lineIndex - 1; i >= 0; i--) {
+                                if (!isContained(std::string(1, cursor.getCurrentLine().text.getString().toAnsiString()[i]), File::DeleteBreaks)) {
+                                    Keybinds::DefaultDeleteCharacter(cursor);
+                                }
+                                else {
+                                    break;
                                 }
                             }
                         }
-                        // if pressed enter
-                        else if (event.text.unicode == Keybinds::InsertNewLine) {
-                            Keybinds::DefaultInsertNewLine(cursor);
-                        }
-                        // normal ascii
-                        else {
-                            Keybinds::DefaultInputAscii(cursor,event);
-                        }
                     }
+                    // if pressed enter
+                    else if (event.text.unicode == Keybinds::InsertNewLine) {
+                        Keybinds::DefaultInsertNewLine(cursor);
+                    } 
+                    else if (event.text.unicode == Keybinds::SaveFile) {
+                        File::WriteFileToOutput();
+                    }
+                    // normal ascii
+                    else {
+                        Keybinds::DefaultInputAscii(cursor,event);
+                    }
+                    
                 }
                 else if (event.type == sf::Event::KeyPressed) {
+                    // std::cout << event.text.unicode << std::endl;
                     if (event.text.unicode == Keybinds::CursorUp) {
                         Keybinds::DefaultCursorUp(cursor);
                     }
@@ -193,31 +203,31 @@ int main()
         ));
 
         // clear the window with black color
-        window->clear(Theme::backgroundColor);
+        File::window->clear(Theme::backgroundColor);
 
         // draw everything here...
         for (auto item : File::Content) {
             item.text.setFillColor(Theme::textColor);
-            window->draw(item.text);
+            File::window->draw(item.text);
         }
 
         if (cursor.isVisible) {
-            window->draw(cursor);
+            File::window->draw(cursor);
         }
 
-        fileButton->draw(window);
-        settingsButton->draw(window);
-        snippitButton->draw(window);
+        fileButton->draw(File::window);
+        settingsButton->draw(File::window);
+        snippitButton->draw(File::window);
         
         // end the current frame
-        window->display();
+        File::window->display();
     }
 
     // delete pointers
     delete fileButton;
     delete settingsButton;
     delete snippitButton;
-    delete window;
+    delete File::window;
 
     // write to "output.txt"
     File::WriteFileToOutput();

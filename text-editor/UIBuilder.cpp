@@ -48,3 +48,18 @@ void UIBuilder::buildSnippitsButton(Button& button) {
     button.label.setFillColor(Theme::textColor);
     button.label.setString("snippits");
 }
+
+void UIBuilder::buildExitButton(Button& button)
+{
+    float buttonSize = 40;
+    float outlineThickness = 3.f;
+    button = Button(sf::Vector2f(File::window->getSize().x - buttonSize - outlineThickness, 0 + outlineThickness), sf::Vector2f(buttonSize, 20));
+    button.setOutlineColor(Theme::buttonOutlineColor);
+    button.setOutlineThickness(outlineThickness);
+    button.setFillColor(Theme::buttonFillColor);
+    button.label.setFont(Font::defaultFont);
+    button.label.setPosition(sf::Vector2f(File::window->getSize().x - buttonSize - outlineThickness, 0 + outlineThickness));
+    button.label.setCharacterSize(20);
+    button.label.setFillColor(Theme::textColor);
+    button.label.setString("x");
+}

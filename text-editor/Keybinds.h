@@ -25,6 +25,7 @@ public:
 	static sf::Uint32 CursorDown;
 	static sf::Uint32 CursorLeft;
 	static sf::Uint32 CursorRight;
+	static sf::Uint32 SaveFile;
 	///////////////////////////////////
 
 	/// <summary>

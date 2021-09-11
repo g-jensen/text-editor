@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <fstream>
 #include "Line.h"
 #include "State.h"
@@ -9,6 +10,9 @@
 class File
 {
 public:
+
+	static sf::RenderWindow* window;
+
 	/// <summary>
 	/// Enum of current state
 	/// </summary>

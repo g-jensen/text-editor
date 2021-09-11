@@ -1,5 +1,7 @@
 #include "File.h"
 
+sf::RenderWindow* File::window = nullptr;
+
 State File::CurrentState = State::Default;
 
 std::vector<Line> File::Content = {};
