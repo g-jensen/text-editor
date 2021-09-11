@@ -1,5 +1,23 @@
 # text-editor
 
-vim-style text editor.
+Lightweight, fully customizable text editor.
 
-download: Release.zip in the repo or <a href="https://www.mediafire.com/file/1d6l3x6bi3e1fn3/Release.zip/file" target="_blank">mediafire link to stable  windows build</a>
+Current features
+
+    -Basic movement around the file with the arrow keys
+    -Creating and deleting new lines
+    -Slicing between lines
+    -Inputing any unicode characters
+    -File importing and exporting
+    -Custom keybinding system
+    -Custom theme system
+
+Upcoming features
+
+    -Copy and pasting
+    -Code snippit support
+
+# Example Video
+[![example video](https://img.youtube.com/vi/edAwFYiuAqE/0.jpg)](https://www.youtube.com/watch?v=edAwFYiuAqE)
+# Download
+Release.zip in the repo or <a href="https://www.mediafire.com/file/vra0l55xvvcxmbw/Release.zip/file" target="_blank">mediafire link to stable  windows build</a>
