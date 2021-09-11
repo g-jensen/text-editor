@@ -58,8 +58,8 @@ int main()
     cursor.setFillColor(Theme::cursorColor);
 
     // initialize first line of file
-    File::Content.push_back(Line("",0));
-    cursor.setCurrentLine(File::Content[0]);
+    (*File::Content).push_back(Line("",0));
+    cursor.setCurrentLine((*File::Content)[0]);
 
     // make top-left file button
     Button* fileButton = new Button();
@@ -84,7 +84,7 @@ int main()
 
         // keep cursor.getCurrentLine up to date with the actual current line 
         // (note: cursor.getCurrentLine returns a copy as opposed to File::Content[cursor.getCurrentLine.lineNumber])
-        cursor.setCurrentLine(Line(File::Content[cursor.getCurrentLine().lineNumber].text.getString(), cursor.getCurrentLine().lineNumber));
+        cursor.setCurrentLine(Line((*File::Content)[cursor.getCurrentLine().lineNumber].text.getString(), cursor.getCurrentLine().lineNumber));
 
         sf::Event event;
         while (File::window->pollEvent(event))
@@ -183,9 +183,9 @@ int main()
 
         cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
 
-        File::Content[0].text.setPosition(10, File::YPadding);
-        for (unsigned int i = 1; i < File::Content.size(); i++) {
-            File::Content[i].text.setPosition(10, (File::Content[i].lineNumber+1) * File::YPadding);
+        (*File::Content)[0].text.setPosition(10, File::YPadding);
+        for (unsigned int i = 1; i < File::Content->size(); i++) {
+            (*File::Content)[i].text.setPosition(10, ((*File::Content)[i].lineNumber+1) * File::YPadding);
         }
 
         float x;
@@ -195,7 +195,7 @@ int main()
         else {
             x = 10;
         }
-        float y = File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y + 30;
+        float y = (*File::Content)[cursor.getCurrentLine().lineNumber].text.getPosition().y + 30;
 
         cursor.setPosition(sf::Vector2f(
             x,
@@ -206,7 +206,7 @@ int main()
         File::window->clear(Theme::backgroundColor);
 
         // draw everything here...
-        for (auto item : File::Content) {
+        for (auto &item : *File::Content) {
             item.text.setFillColor(Theme::textColor);
             File::window->draw(item.text);
         }
@@ -231,6 +231,9 @@ int main()
 
     // write to "output.txt"
     File::WriteFileToOutput();
+
+
+    delete File::Content;
 
     return 0;
 }

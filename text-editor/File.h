@@ -21,7 +21,7 @@ public:
 	/// <summary>
 	/// List of all the lines in the file
 	/// </summary>
-	static std::vector<Line> Content;
+	static std::vector<Line>* Content;
 	
 	/// <summary>
 	/// List of all the characters that will stop a word delete

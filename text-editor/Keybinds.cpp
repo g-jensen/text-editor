@@ -77,38 +77,38 @@ void Keybinds::DefaultDeleteCharacter(Cursor& cursor)
     // if the line is empty
     if (cursor.getCurrentLine().isEmpty() && cursor.getCurrentLine().lineNumber != 0) {
         // delete the line
-        File::Content.erase(File::Content.begin() + cursor.getCurrentLine().lineNumber);
+        File::Content->erase(File::Content->begin() + cursor.getCurrentLine().lineNumber);
 
         // decrement current line number
         cursor.decrementLine(1);
 
         // decrement every line's number past the empty line
-        for (unsigned int i = cursor.getCurrentLine().lineNumber + 1; i < File::Content.size(); i++) {
-            File::Content[i].lineNumber--;
+        for (unsigned int i = cursor.getCurrentLine().lineNumber + 1; i < File::Content->size(); i++) {
+            (*File::Content)[i].lineNumber--;
         }
 
-        cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize();
+        cursor.lineIndex = (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().getSize();
     }
     else {
         // delete a character
         if (cursor.lineIndex > 0) {
-            File::Content[cursor.getCurrentLine().lineNumber].deleteCharacter(cursor.lineIndex - 1);
+            (*File::Content)[cursor.getCurrentLine().lineNumber].deleteCharacter(cursor.lineIndex - 1);
             cursor.lineIndex--;
         }
         // move previous line onto above line
-        else if (File::Content[cursor.getCurrentLine().lineNumber].lineNumber > 0) {
+        else if ((*File::Content)[cursor.getCurrentLine().lineNumber].lineNumber > 0) {
             // std::cout << "chugnus" << std::endl;
-            int previousLineSize = File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize();
+            int previousLineSize = (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().getSize();
             // std::cout << previousLineSize << std::endl;
-            File::Content[cursor.getCurrentLine().lineNumber - 1].text.setString(File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString() + File::Content[cursor.getCurrentLine().lineNumber].text.getString());
-            File::Content.erase(File::Content.begin() + cursor.getCurrentLine().lineNumber);
+            (*File::Content)[cursor.getCurrentLine().lineNumber - 1].text.setString((*File::Content)[cursor.getCurrentLine().lineNumber - 1].text.getString() + (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString());
+            File::Content->erase(File::Content->begin() + cursor.getCurrentLine().lineNumber);
 
-            cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber-1].text.getString().getSize() - previousLineSize;
+            cursor.lineIndex = (*File::Content)[cursor.getCurrentLine().lineNumber-1].text.getString().getSize() - previousLineSize;
             cursor.decrementLine(1);
 
             // decrement every line's number past the empty line
-            for (unsigned int i = cursor.getCurrentLine().lineNumber + 1; i < File::Content.size(); i++) {
-                File::Content[i].lineNumber--;
+            for (unsigned int i = cursor.getCurrentLine().lineNumber + 1; i < File::Content->size(); i++) {
+                (*File::Content)[i].lineNumber--;
             }
         }
     }
@@ -117,30 +117,30 @@ void Keybinds::DefaultDeleteCharacter(Cursor& cursor)
 
 void Keybinds::DefaultInsertNewLine(Cursor& cursor)
 {
-    std::string secondHalf = File::Content[cursor.getCurrentLine().lineNumber].text.getString().substring(cursor.lineIndex,File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize());
-    File::Content[cursor.getCurrentLine().lineNumber].text.setString(File::Content[cursor.getCurrentLine().lineNumber].text.getString().substring(0,cursor.lineIndex));
+    std::string secondHalf = (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().substring(cursor.lineIndex, (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().getSize());
+    (*File::Content)[cursor.getCurrentLine().lineNumber].text.setString((*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().substring(0,cursor.lineIndex));
     cursor.incrementLine(1);
 
     Line newLine = Line(secondHalf, cursor.getCurrentLine().lineNumber-1);
-    File::Content.insert(File::Content.begin() + cursor.getCurrentLine().lineNumber, newLine);
+    File::Content->insert(File::Content->begin() + cursor.getCurrentLine().lineNumber, newLine);
 
-    for (unsigned int i = cursor.getCurrentLine().lineNumber; i < File::Content.size(); i++) {
-        File::Content[i].lineNumber++;
+    for (unsigned int i = cursor.getCurrentLine().lineNumber; i < File::Content->size(); i++) {
+        (*File::Content)[i].lineNumber++;
     }
     cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
     cursor.lineIndex = 0;
 
     cursor.setPosition(sf::Vector2f(
         cursor.getCurrentLine().getWidth(cursor.lineIndex) + 10,
-        File::Content[cursor.getCurrentLine().lineNumber].text.getPosition().y)
+        (*File::Content)[cursor.getCurrentLine().lineNumber].text.getPosition().y)
     );
 }
 
 void Keybinds::DefaultInputAscii(Cursor& cursor, sf::Event event)
 {
-    std::string firstHalf = File::Content[cursor.getCurrentLine().lineNumber].text.getString().toAnsiString().substr(0, cursor.lineIndex);
-    std::string secondHalf = File::Content[cursor.getCurrentLine().lineNumber].text.getString().toAnsiString().substr(cursor.lineIndex, File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize());
-    File::Content[cursor.getCurrentLine().lineNumber].text.setString(firstHalf + static_cast<char>(event.text.unicode) + secondHalf);
+    std::string firstHalf = (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().toAnsiString().substr(0, cursor.lineIndex);
+    std::string secondHalf = (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().toAnsiString().substr(cursor.lineIndex, (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().getSize());
+    (*File::Content)[cursor.getCurrentLine().lineNumber].text.setString(firstHalf + static_cast<char>(event.text.unicode) + secondHalf);
     cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
     cursor.lineIndex++;
 }
@@ -148,12 +148,12 @@ void Keybinds::DefaultInputAscii(Cursor& cursor, sf::Event event)
 void Keybinds::DefaultCursorUp(Cursor& cursor)
 {
 
-    if ((unsigned int)cursor.lineIndex > File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize()) {
-        cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize();
+    if ((unsigned int)cursor.lineIndex > (*File::Content)[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize()) {
+        cursor.lineIndex = (*File::Content)[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize();
     }
 
     // decrement current line
-    if (File::Content.size() > 0 && cursor.getCurrentLine().lineNumber != 0) {
+    if (File::Content->size() > 0 && cursor.getCurrentLine().lineNumber != 0) {
         cursor.decrementLine(1);
     }
 }
@@ -161,12 +161,12 @@ void Keybinds::DefaultCursorUp(Cursor& cursor)
 void Keybinds::DefaultCursorDown(Cursor& cursor)
 {
 
-    if ((unsigned int)cursor.lineIndex > File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize()) {
-        cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize();
+    if ((unsigned int)cursor.lineIndex > (*File::Content)[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize()) {
+        cursor.lineIndex = (*File::Content)[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize();
     }
 
     // increment current line
-    if (File::Content.size() > 0 && (unsigned int)cursor.getCurrentLine().lineNumber < File::Content.size() - 1) {
+    if (File::Content->size() > 0 && (unsigned int)cursor.getCurrentLine().lineNumber < File::Content->size() - 1) {
         cursor.incrementLine(1);
     }
 }
@@ -178,7 +178,7 @@ void Keybinds::DefaultCursorLeft(Cursor& cursor)
     } else if (cursor.lineIndex == 0 && cursor.getCurrentLine().lineNumber > 0) {
         
         cursor.decrementLine(1);
-        cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber].text.getString().getSize();
+        cursor.lineIndex = (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().getSize();
     }
 }
 
@@ -187,7 +187,7 @@ void Keybinds::DefaultCursorRight(Cursor& cursor)
     if ((unsigned int)cursor.lineIndex < cursor.getCurrentLine().text.getString().getSize()) {
         cursor.lineIndex++;
     }
-    else if ((unsigned int)cursor.lineIndex == cursor.getCurrentLine().text.getString().getSize() && (unsigned int)cursor.getCurrentLine().lineNumber < File::Content.size() - 1) {
+    else if ((unsigned int)cursor.lineIndex == cursor.getCurrentLine().text.getString().getSize() && (unsigned int)cursor.getCurrentLine().lineNumber < File::Content->size() - 1) {
         cursor.lineIndex = 0;
         cursor.incrementLine(1);
     }
