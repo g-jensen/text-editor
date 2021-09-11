@@ -48,7 +48,7 @@ void Line::deleteCharacter(int index)
 void Line::populateTextList(sf::Text text)
 {
 	this->textList.clear();
-	for (int i = 0; i < text.getString().getSize(); i++) {
+	for (unsigned int i = 0; i < text.getString().getSize(); i++) {
 		sf::Text t;
 		t.setFont(Font::defaultFont);
 		t.setString(text.getString().toAnsiString().substr(i, 1));
@@ -56,13 +56,13 @@ void Line::populateTextList(sf::Text text)
 	}
 }
 
-float Line::getWidth(int n)
+float Line::getWidth(unsigned int n)
 {
 	if (n > this->textList.size()) {
 		float sum = 0.0f;
 		sf::Text placeholder;
 		placeholder.setFont(Font::defaultFont);
-		for (int i = 0; i < this->textList.size(); i++) {
+		for (unsigned int i = 0; i < this->textList.size(); i++) {
 			placeholder.setString(placeholder.getString() + textList[i].getString());
 		}
 		sum = placeholder.getGlobalBounds().width;
@@ -72,7 +72,7 @@ float Line::getWidth(int n)
 		float sum = 0.0f;
 		sf::Text placeholder;
 		placeholder.setFont(Font::defaultFont);
-		for (int i = 0; i < n; i++) {
+		for (unsigned int i = 0; i < n; i++) {
 			placeholder.setString(placeholder.getString() + textList[i].getString());
 		}
 		sum = placeholder.getGlobalBounds().width;

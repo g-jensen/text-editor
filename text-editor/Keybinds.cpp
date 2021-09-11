@@ -77,7 +77,7 @@ void Keybinds::DefaultDeleteCharacter(Cursor& cursor)
         cursor.decrementLine(1);
 
         // decrement every line's number past the empty line
-        for (int i = cursor.getCurrentLine().lineNumber + 1; i < File::Content.size(); i++) {
+        for (unsigned int i = cursor.getCurrentLine().lineNumber + 1; i < File::Content.size(); i++) {
             File::Content[i].lineNumber--;
         }
 
@@ -101,7 +101,7 @@ void Keybinds::DefaultDeleteCharacter(Cursor& cursor)
             cursor.decrementLine(1);
 
             // decrement every line's number past the empty line
-            for (int i = cursor.getCurrentLine().lineNumber + 1; i < File::Content.size(); i++) {
+            for (unsigned int i = cursor.getCurrentLine().lineNumber + 1; i < File::Content.size(); i++) {
                 File::Content[i].lineNumber--;
             }
         }
@@ -118,7 +118,7 @@ void Keybinds::DefaultInsertNewLine(Cursor& cursor)
     Line newLine = Line(secondHalf, cursor.getCurrentLine().lineNumber-1);
     File::Content.insert(File::Content.begin() + cursor.getCurrentLine().lineNumber, newLine);
 
-    for (int i = cursor.getCurrentLine().lineNumber; i < File::Content.size(); i++) {
+    for (unsigned int i = cursor.getCurrentLine().lineNumber; i < File::Content.size(); i++) {
         File::Content[i].lineNumber++;
     }
     cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
@@ -142,7 +142,7 @@ void Keybinds::DefaultInputAscii(Cursor& cursor, sf::Event event)
 void Keybinds::DefaultCursorUp(Cursor& cursor)
 {
 
-    if (cursor.lineIndex > File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize()) {
+    if ((unsigned int)cursor.lineIndex > File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize()) {
         cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber - 1].text.getString().getSize();
     }
 
@@ -155,12 +155,12 @@ void Keybinds::DefaultCursorUp(Cursor& cursor)
 void Keybinds::DefaultCursorDown(Cursor& cursor)
 {
 
-    if (cursor.lineIndex > File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize()) {
+    if ((unsigned int)cursor.lineIndex > File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize()) {
         cursor.lineIndex = File::Content[cursor.getCurrentLine().lineNumber + 1].text.getString().getSize();
     }
 
     // increment current line
-    if (File::Content.size() > 0 && cursor.getCurrentLine().lineNumber < File::Content.size() - 1) {
+    if (File::Content.size() > 0 && (unsigned int)cursor.getCurrentLine().lineNumber < File::Content.size() - 1) {
         cursor.incrementLine(1);
     }
 }
@@ -178,10 +178,10 @@ void Keybinds::DefaultCursorLeft(Cursor& cursor)
 
 void Keybinds::DefaultCursorRight(Cursor& cursor)
 {
-    if (cursor.lineIndex < cursor.getCurrentLine().text.getString().getSize()) {
+    if ((unsigned int)cursor.lineIndex < cursor.getCurrentLine().text.getString().getSize()) {
         cursor.lineIndex++;
     }
-    else if (cursor.lineIndex == cursor.getCurrentLine().text.getString().getSize() && cursor.getCurrentLine().lineNumber < File::Content.size() - 1) {
+    else if ((unsigned int)cursor.lineIndex == cursor.getCurrentLine().text.getString().getSize() && (unsigned int)cursor.getCurrentLine().lineNumber < File::Content.size() - 1) {
         cursor.lineIndex = 0;
         cursor.incrementLine(1);
     }

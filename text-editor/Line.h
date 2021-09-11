@@ -46,6 +46,6 @@ public:
 	/// Adds the bounds of every character in the line to a certain character
 	/// </summary>
 	/// <param name="n">Index of character to stop</param>
-	float getWidth(int n);
+	float getWidth(unsigned int n);
 };
 
