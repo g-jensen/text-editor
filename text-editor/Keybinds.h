@@ -27,6 +27,7 @@ public:
 	static sf::Uint32 CursorRight;
 	static sf::Uint32 SaveFile;
 	static sf::Uint32 CloseWindow;
+	static sf::Uint32 ReloadConfig;
 	///////////////////////////////////
 
 	/// <summary>

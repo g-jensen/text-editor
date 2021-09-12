@@ -160,6 +160,16 @@ int main()
                     else if (event.text.unicode == Keybinds::CloseWindow) {
                         File::window->close();
                     }
+                    else if (event.text.unicode == Keybinds::ReloadConfig) {
+                        Config::Load();
+                        Keybinds::Load();
+                        Theme::Load();
+                        Font::load();
+                        UIBuilder::buildFileButton(*fileButton);
+                        UIBuilder::buildSettingsButton(*settingsButton);
+                        UIBuilder::buildSnippitsButton(*snippitButton);
+                        cursor.setFillColor(Theme::cursorColor);
+                    }
                     // normal ascii
                     else {
                         Keybinds::DefaultInputAscii(cursor,event);

@@ -43,6 +43,7 @@ sf::Uint32 Keybinds::CursorRight = 0;
 
 sf::Uint32 Keybinds::SaveFile = 0;
 sf::Uint32 Keybinds::CloseWindow = 0;
+sf::Uint32 Keybinds::ReloadConfig = 0;
 
 void Keybinds::Load()
 {
@@ -71,7 +72,7 @@ void Keybinds::Load()
 
     Keybinds::SaveFile = stoi((std::string)json["SAVE_FILE"]);
     Keybinds::CloseWindow = stoi((std::string)json["CLOSE_WINDOW"]);
-
+    Keybinds::ReloadConfig = stoi((std::string)json["RELOAD_CONFIG"]);
 }
 
 void Keybinds::DefaultDeleteCharacter(Cursor& cursor)

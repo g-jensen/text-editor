@@ -24,39 +24,39 @@ void Theme::Load()
     
     nlohmann::json json = nlohmann::json::parse(file);
 
-    fontPath = (std::string)json["font"];
+    Theme::fontPath = (std::string)json["font"];
 
-    backgroundColor = sf::Color(
+    Theme::backgroundColor = sf::Color(
         stoi((std::string)json["background-color"]["r"]),
         stoi((std::string)json["background-color"]["g"]),
         stoi((std::string)json["background-color"]["b"])
     );
 
-    textColor = sf::Color(
+    Theme::textColor = sf::Color(
         stoi((std::string)json["text-color"]["r"]),
         stoi((std::string)json["text-color"]["g"]),
         stoi((std::string)json["text-color"]["b"])
     );
 
-    cursorColor = sf::Color(
+    Theme::cursorColor = sf::Color(
         stoi((std::string)json["cursor-color"]["r"]),
         stoi((std::string)json["cursor-color"]["g"]),
         stoi((std::string)json["cursor-color"]["b"])
     );
 
-    buttonFillColor = sf::Color(
+    Theme::buttonFillColor = sf::Color(
         stoi((std::string)json["button-fill-color"]["r"]),
         stoi((std::string)json["button-fill-color"]["g"]),
         stoi((std::string)json["button-fill-color"]["b"])
     );
 
-    buttonHoverColor = sf::Color(
+    Theme::buttonHoverColor = sf::Color(
         stoi((std::string)json["button-hover-color"]["r"]),
         stoi((std::string)json["button-hover-color"]["g"]),
         stoi((std::string)json["button-hover-color"]["b"])
     );
 
-    buttonOutlineColor = sf::Color(
+    Theme::buttonOutlineColor = sf::Color(
         stoi((std::string)json["button-outline-color"]["r"]),
         stoi((std::string)json["button-outline-color"]["g"]),
         stoi((std::string)json["button-outline-color"]["b"])
