@@ -13,6 +13,7 @@
 #include <iostream>
 #include <ostream>
 #include <unordered_map>
+#include <filesystem>
 
 #include <SFML/Graphics.hpp>
 #include "text-editor.h"
@@ -77,6 +78,8 @@ int main()
 
     File::window->setFramerateLimit(300);
 
+    auto path = std::filesystem::current_path();
+
     // run the program as long as the window is open
     while (File::window->isOpen())
     {
@@ -107,6 +110,7 @@ int main()
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     File::CurrentState = State::NoInput;
                     File::LoadFile(FileExplorer::Open());
+                    std::filesystem::current_path(path);
                     cursor.setLineNumber(0);
                     cursor.lineIndex = 0;
                 }
