@@ -50,3 +50,27 @@ std::string FileExplorer::Open()
     //File::CurrentState = State::Default;
     return (std::string)filename;
 }
+
+std::string FileExplorer::GetClipboard()
+{
+    // Try opening the clipboard
+    OpenClipboard(nullptr);
+
+    // Get handle of clipboard object for ANSI text
+    HANDLE hData = GetClipboardData(CF_TEXT);
+
+    // Lock the handle to get the actual text pointer
+    char* pszText = static_cast<char*>(GlobalLock(hData));
+
+    // Save text in a string class instance
+    std::string text(pszText);
+
+    // Release the lock
+    GlobalUnlock(hData);
+
+    // Release the clipboard
+    CloseClipboard();
+
+    return text;
+    
+}

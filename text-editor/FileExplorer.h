@@ -18,5 +18,7 @@ public:
 	/// </summary>
 	/// <returns>Path to the file chosen</returns>
 	static std::string Open();
+
+	static std::string GetClipboard();
 };
 

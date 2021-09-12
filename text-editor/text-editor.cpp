@@ -28,7 +28,7 @@ bool isContained(std::string s, std::vector<std::string> v) {
 
 int main()
 {
-    #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+    // #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
     // load config.json
     Config::Load();
@@ -80,6 +80,9 @@ int main()
     // run the program as long as the window is open
     while (File::window->isOpen())
     {
+
+        // std::cout << FileExplorer::GetClipboard() << std::endl;
+
         File::window->setFramerateLimit(300);
 
         // keep cursor.getCurrentLine up to date with the actual current line 
@@ -170,6 +173,14 @@ int main()
                         UIBuilder::buildSettingsButton(*settingsButton);
                         UIBuilder::buildSnippitsButton(*snippitButton);
                         cursor.setFillColor(Theme::cursorColor);
+                    }
+                    else if (event.text.unicode == Keybinds::PasteClipboard) {
+                        std::string clipboard = FileExplorer::GetClipboard();
+                        std::string firstHalf = (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().toAnsiString().substr(0, cursor.lineIndex);
+                        std::string secondHalf = (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().toAnsiString().substr(cursor.lineIndex, (*File::Content)[cursor.getCurrentLine().lineNumber].text.getString().getSize());
+                        (*File::Content)[cursor.getCurrentLine().lineNumber].text.setString(firstHalf + clipboard + secondHalf);
+                        cursor.getCurrentLine().populateTextList(cursor.getCurrentLine().text);
+                        cursor.lineIndex += clipboard.size();
                     }
                     // normal ascii
                     else {
