@@ -6,11 +6,19 @@
 #include "State.h"
 #include <iostream>
 #include "Cursor.h"
+#include <filesystem>
 
 class File
 {
 public:
+	/// <summary>
+	/// Path of the .exe
+	/// </summary>
+	static std::filesystem::path programPath;
 
+	/// <summary>
+	/// Main window
+	/// </summary>
 	static sf::RenderWindow* window;
 
 	/// <summary>

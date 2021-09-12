@@ -1,5 +1,7 @@
 #include "File.h"
 
+std::filesystem::path programPath = std::filesystem::current_path();
+
 sf::RenderWindow* File::window = nullptr;
 
 State File::CurrentState = State::Default;
