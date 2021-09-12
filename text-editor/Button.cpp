@@ -18,5 +18,5 @@ void Button::draw(sf::RenderWindow* window)
 
 bool Button::contains(sf::Vector2i position)
 {
-	return this->getGlobalBounds().contains(position.x,position.y);
+	return this->getGlobalBounds().contains((float)position.x, (float)position.y);
 }

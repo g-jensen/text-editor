@@ -16,7 +16,7 @@ void File::WriteFileToOutput()
 {
     std::ofstream file;
     file.open("output.txt");
-    for (int i = 0; i < File::Content->size(); i++) {
+    for (unsigned int i = 0; i < File::Content->size(); i++) {
         if (i != File::Content->size() - 1) {
             file << (*File::Content)[i].text.getString().toAnsiString() << std::endl;
         }

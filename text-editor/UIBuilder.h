@@ -8,6 +8,11 @@
 class UIBuilder
 {
 public:
+		
+	static sf::Vector2f fileButtonSize;
+	static sf::Vector2f settingsButtonSize;
+	static sf::Vector2f snippitButtonSize;
+
 	/// <summary>
 	/// DEPRECATED | Change textInput to object with pre-defined values for a file input box
 	/// </summary>
