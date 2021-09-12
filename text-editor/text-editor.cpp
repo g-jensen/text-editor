@@ -28,7 +28,7 @@ bool isContained(std::string s, std::vector<std::string> v) {
 
 int main()
 {
-    // #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+    #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
     // load config.json
     Config::Load();
