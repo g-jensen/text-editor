@@ -17,6 +17,11 @@ public:
 	static std::filesystem::path programPath;
 
 	/// <summary>
+	/// Path to the file that is currently open
+	/// </summary>
+	static std::string openFile;
+
+	/// <summary>
 	/// Main window
 	/// </summary>
 	static sf::RenderWindow* window;

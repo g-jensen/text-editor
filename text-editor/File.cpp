@@ -1,6 +1,8 @@
 #include "File.h"
 
-std::filesystem::path programPath = std::filesystem::current_path();
+std::string File::openFile = "output.txt";
+
+std::filesystem::path File::programPath = std::filesystem::current_path();
 
 sf::RenderWindow* File::window = nullptr;
 
@@ -17,7 +19,7 @@ float File::YPadding = 30.f;
 void File::WriteFileToOutput()
 {
     std::ofstream file;
-    file.open("output.txt");
+    file.open(File::openFile);
     for (unsigned int i = 0; i < File::Content->size(); i++) {
         if (i != File::Content->size() - 1) {
             file << (*File::Content)[i].text.getString().toAnsiString() << std::endl;
@@ -49,4 +51,6 @@ void File::LoadFile(std::string path)
     if (File::Content->size() == 0) {
         File::Content->push_back(Line("",0));
     }
+    File::openFile = path;
+    File::window->setTitle("Text Editor - " + File::openFile);
 }

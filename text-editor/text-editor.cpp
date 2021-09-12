@@ -247,7 +247,6 @@ int main()
     // write to "output.txt"
     File::WriteFileToOutput();
 
-
     delete File::Content;
 
     return 0;
