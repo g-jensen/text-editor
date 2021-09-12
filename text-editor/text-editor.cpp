@@ -125,6 +125,7 @@ int main()
             cursor.isVisible = true;
             if (File::CurrentState == State::Default) {
                 if (event.type == sf::Event::TextEntered) {
+                    std::cout << event.text.unicode << std::endl;
                     // if press backspace
                     if (event.text.unicode == Keybinds::DeleteCharacter) {
                         Keybinds::DefaultDeleteCharacter(cursor);
@@ -155,6 +156,9 @@ int main()
                     } 
                     else if (event.text.unicode == Keybinds::SaveFile) {
                         File::WriteFileToOutput();
+                    }
+                    else if (event.text.unicode == Keybinds::CloseWindow) {
+                        File::window->close();
                     }
                     // normal ascii
                     else {
